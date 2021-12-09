@@ -1,22 +1,41 @@
 import { push } from 'connected-react-router';
 import type { Dispatch } from 'redux';
-
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from '@firebase/auth';
+import { auth, db, FirebaseTimestamp } from '../../firebase';
+import { getDoc, setDoc, doc } from "firebase/firestore";
 import { signInAction } from './actions';
-import { RootState } from '../store/store';
 
-export const signIn = () => {
-  return async (dispatch: Dispatch, getState: () => RootState) => {
-    const state = getState();
-    const isSignedIn = state.users.isSignedIn;
 
-    if (!isSignedIn) {
-      const URL = 'https://api.github.com/users/suzu1997';
-      const response = await fetch(URL).then(res => res.json());
-      const username = response.login;
-      const uid = response.id;
+// ログインを行う
+export const signIn = (email: string, password: string) => {
+  return async (dispatch: Dispatch) => {
+    // validation
+    if (email === '' || password === '') {
+      alert('必須項目が未入力です');
+      return;
+    }
+    signInWithEmailAndPassword(auth, email, password).then((result) => {
+      const user = result.user;
 
-      dispatch(signInAction({
-        uid: uid,
+      if (user) {
+        const uid = user.uid;
+
+        getDoc(doc(db, "users", uid)).then((snapshot) => {
+          const userData = snapshot.data();
+          if (userData) {
+            dispatch(signInAction({
+              isSignedIn: true,
+              role: userData.role,
+              uid: uid,
+              username: userData.username,
+            }))
+            dispatch(push('/'));
+          }
+        });
+      }
+    })
+  }
+}
 // アカウント登録を行う
 export const signUp = (username: string, email: string, password: string, confirmPassword: string) => {
   return async (dispatch: Dispatch) => {
