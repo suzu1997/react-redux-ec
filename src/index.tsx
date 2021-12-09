@@ -1,9 +1,7 @@
-import React from 'react';
 import ReactDOM from 'react-dom';
 // reduxを使うためのインポート
 import { Provider } from 'react-redux';
 import createStore from './reducks/store/store';
-import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { ConnectedRouter } from 'connected-react-router';
