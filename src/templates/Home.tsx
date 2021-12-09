@@ -7,13 +7,11 @@ const Home = () => {
   const uid = getUserId(selector);
   const username = getUsername(selector);
 
-  console.log(uid);
-  
   return (
     <div>
       <h1>Home</h1>
-      <p>{uid}</p>
-      <p>{username}</p>
+      <p>ユーザーID:{uid}</p>
+      <p>ユーザー名:{username}</p>
     </div>
   );
 };
