@@ -1,11 +1,8 @@
+import { UserState } from './types';
+
 // Action typeを定義してexport
 // reducersでインポートして伝える
 export const SIGN_IN = 'SIGN_IN';
-
-type UserState = {
-  uid: string;
-  username: string;
-}
 
 export const signInAction = (userState: UserState) => {
   // プレーンなオブジェクトを返す

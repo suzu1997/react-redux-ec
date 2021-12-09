@@ -1,11 +1,7 @@
 import * as Actions from './actions';
 import initialState from '../store/initialState';
+import { Action } from './types';
 
-type Action = {
-  type: string;
-  payload: any;
-}
- 
 // 第一引数にState(現在のstateの状態)。初期状態をデフォルトとして設定
 // 第二引数にactionがreturnした値(typeとpayload)
 export const UsersReducer = (state = initialState.users, action: Action) => {
