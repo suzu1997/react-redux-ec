@@ -1,15 +1,15 @@
-import firebase from 'firebase/app';
-import 'firebase/firestore';
-import 'firebase/auth';
-import 'firebase/storage';
-import 'firebase/functions';
+import { initializeApp } from 'firebase/app';
+import { getFirestore, Timestamp } from 'firebase/firestore';
+import { getAuth } from 'firebase/auth';
+import { getStorage } from 'firebase/storage';
+import { getFunctions } from 'firebase/functions';
 import { firebaseConfig } from './config'; //上記でexportした設定値
 
 //firebaseの初期化
-firebase.initializeApp(firebaseConfig); //プロジェクトの設定値で初期化
+const firebaseApp = initializeApp(firebaseConfig); //プロジェクトの設定値で初期化
 //export
-export const db = firebase.firestore();
-export const auth = firebase.auth();
-export const storage = firebase.storage();
-export const functions = firebase.functions();
-export const FirebaseTimestamp = firebase.firestore.Timestamp;
+export const db = getFirestore(firebaseApp);
+export const auth = getAuth(firebaseApp);
+export const storage = getStorage();
+export const functions = getFunctions();
+export const FirebaseTimestamp = Timestamp;
