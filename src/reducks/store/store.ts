@@ -5,6 +5,7 @@ import {
 } from 'redux';
 import { connectRouter, routerMiddleware } from 'connected-react-router';
 import { History } from 'history';
+import thunk from 'redux-thunk';
 
 import { UsersReducer } from '../users/reducers';
 
@@ -25,7 +26,8 @@ const createStore = (history: History) => {
     }),
     // ルーターをmiddlewareとして使用することを宣言
     applyMiddleware(
-      routerMiddleware(history)
+      routerMiddleware(history),
+      thunk // redux-thunkを導入
     )
   )
 }

@@ -1,22 +1,14 @@
 import { useDispatch } from 'react-redux';
-// push: 画面遷移をすることができるメソッド
-import { push } from 'connected-react-router';
-import { signInAction } from '../reducks/users/actions';
+import { signIn } from '../reducks/users/operations';
 
-const Login = () => {
+const Login = (props: any) => {
+  // console.log(props.users);
   const dispatch = useDispatch();
-
-  const login = () => {
-    console.log('login');
-
-    dispatch(signInAction({ uid: '0001', username: 'test' }));
-    dispatch(push('/'));
-  };
 
   return (
     <div>
       <h2>ログイン</h2>
-      <button onClick={login}>ログイン</button>
+      <button onClick={() => dispatch(signIn())}>ログイン</button>
     </div>
   );
 };
