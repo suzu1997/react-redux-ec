@@ -1,8 +1,9 @@
+import { VFC } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../reducks/store/store';
 import { getUserId, getUsername } from '../reducks/users/selectors';
 
-const Home = () => {
+const Home: VFC = () => {
   const selector = useSelector((state: RootState) => state);
   const uid = getUserId(selector);
   const username = getUsername(selector);
