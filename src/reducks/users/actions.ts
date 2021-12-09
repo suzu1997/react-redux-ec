@@ -8,12 +8,13 @@ export const signInAction = (userState: UserState) => {
   // プレーンなオブジェクトを返す
   return {
     // typeとpayloadを記述する
-     type: 'SIGN_IN',
-     payload: {
-        isSignedIn: true,
-        uid : userState.uid,
-        username: userState.username
-     }
+    type: 'SIGN_IN',
+    payload: {
+      isSignedIn: true,
+      role: userState.role,
+      uid: userState.uid,
+      username: userState.username
+    }
   }
 };
 
