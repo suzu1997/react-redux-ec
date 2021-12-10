@@ -3,6 +3,7 @@ import { TextInput } from '../components/Uikit/TextInput';
 import { PrimaryButton } from '../components/Uikit/PrimaryButton';
 import { useDispatch } from 'react-redux';
 import { signUp } from '../reducks/users/operations';
+import { push } from 'connected-react-router';
 
 const SignUp: VFC = () => {
   const dispatch = useDispatch();
@@ -89,6 +90,7 @@ const SignUp: VFC = () => {
             dispatch(signUp(username, email, password, confirmPassword))
           }
         />
+        <p onClick={() => dispatch(push('/signin'))}>アカウントをすでにお持ちの方はこちら</p>
       </div>
     </div>
   );

@@ -3,6 +3,7 @@ import { TextInput } from '../components/Uikit/TextInput';
 import { PrimaryButton } from '../components/Uikit/PrimaryButton';
 import { useDispatch } from 'react-redux';
 import { signIn } from '../reducks/users/operations';
+import { push } from 'connected-react-router';
 
 const SignIn: VFC = () => {
   const dispatch = useDispatch();
@@ -51,9 +52,15 @@ const SignIn: VFC = () => {
       <div className='module-spacer--medium' />
       <div className='center'>
         <PrimaryButton
-          label='サインイン'
+          label='SIGN IN'
           onClick={() => dispatch(signIn(email, password))}
         />
+        <p onClick={() => dispatch(push('/signup'))}>
+          アカウントをお持ちでない方はこちら
+        </p>
+        <p onClick={() => dispatch(push('/signin/resetPassword'))}>
+          パスワードをお忘れですか？再設定はこちら
+        </p>
       </div>
     </div>
   );
