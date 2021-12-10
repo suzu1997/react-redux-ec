@@ -3,6 +3,11 @@ import { RootState } from '../store/store';
 
 const usersSelector = (state: RootState) => state.users;
 
+export const getIsSignedIn = createSelector(
+  [usersSelector],
+  (state) => state.isSignedIn
+)
+
 export const getUserId = createSelector(
   [usersSelector],
   (state) => state.uid
