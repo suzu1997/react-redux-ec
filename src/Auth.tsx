@@ -23,6 +23,7 @@ export const Auth: VFC<Props> = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+   // ログインしていなければ、空の画面を表示
   if (!isSignedIn) {
     return <></>;
   }
