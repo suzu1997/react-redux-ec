@@ -3,7 +3,7 @@ import type { Dispatch } from 'redux';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from '@firebase/auth';
 import { auth, db, FirebaseTimestamp } from '../../firebase';
 import { getDoc, setDoc, doc } from "firebase/firestore";
-import { signInAction } from './actions';
+import { signInAction, signOutAction } from './actions';
 
 // 認証をリッスン(監視)する
 export const ListenAuthState = () => {
@@ -99,6 +99,16 @@ export const signUp = (username: string, email: string, password: string, confir
           dispatch(push('/'));
         });
       }
+    })
+  }
+}
+
+// ログアウトする
+export const signOut = () => {
+  return async (dispatch: Dispatch) => {
+    auth.signOut().then(() => {
+      dispatch(signOutAction());
+      dispatch(push('/signin'));
     })
   }
 }
