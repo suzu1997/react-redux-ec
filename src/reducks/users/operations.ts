@@ -6,6 +6,7 @@ import { getDoc, setDoc, doc } from "firebase/firestore";
 import { signInAction, signOutAction } from './actions';
 
 // 認証をリッスン(監視)する
+// 前回のセッションが残っていれば、自動でstoreに認証情報を追加して認証後画面に遷移
 export const ListenAuthState = () => {
   return async (dispatch: Dispatch) => {
     return onAuthStateChanged(auth, (user) => {
