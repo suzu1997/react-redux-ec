@@ -1,10 +1,37 @@
 import { push } from 'connected-react-router';
 import type { Dispatch } from 'redux';
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from '@firebase/auth';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from '@firebase/auth';
 import { auth, db, FirebaseTimestamp } from '../../firebase';
 import { getDoc, setDoc, doc } from "firebase/firestore";
 import { signInAction } from './actions';
 
+// 認証をリッスン(監視)する
+export const ListenAuthState = () => {
+  return async (dispatch: Dispatch) => {
+    return onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // ユーザーがログインしている場合
+        const uid = user.uid;
+        // ユーザーの情報を取得
+        getDoc(doc(db, "users", uid)).then((snapshot) => {
+          const userData = snapshot.data();
+          if (userData) {
+            // ストアの中身を更新
+            dispatch(signInAction({
+              isSignedIn: true,
+              role: userData.role,
+              uid: uid,
+              username: userData.username,
+            }))
+          }
+        });
+      } else {
+        // ユーザーがログインしていない場合、ログインページに飛ぶ
+        dispatch(push('/signin'));
+      }
+    });
+  }
+}
 
 // ログインを行う
 export const signIn = (email: string, password: string) => {
@@ -19,10 +46,11 @@ export const signIn = (email: string, password: string) => {
 
       if (user) {
         const uid = user.uid;
-
+        // ユーザーの情報を取得
         getDoc(doc(db, "users", uid)).then((snapshot) => {
           const userData = snapshot.data();
           if (userData) {
+            // ストアの中身を更新
             dispatch(signInAction({
               isSignedIn: true,
               role: userData.role,
