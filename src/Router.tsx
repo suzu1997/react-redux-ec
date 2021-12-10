@@ -1,6 +1,6 @@
 import { Route, Switch } from 'react-router';
 
-import { SignIn, Home, SignUp, ResetPass } from './templates';
+import { SignIn, Home, SignUp, ResetPass, ProductEdit } from './templates';
 import { Auth } from './Auth';
 
 export const Router = () => {
@@ -12,6 +12,7 @@ export const Router = () => {
       {/* 認証が必要なページをAuthコンポーネントで囲んで監視 */}
       <Auth>
         <Route exact path={'(/)?'} component={Home} />
+        <Route exact path={'/product/edit'} component={ProductEdit} />
       </Auth>
     </Switch>
   );
