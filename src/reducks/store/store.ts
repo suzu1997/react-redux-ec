@@ -8,9 +8,11 @@ import { History } from 'history';
 import thunk from 'redux-thunk';
 
 import { UsersReducer } from '../users/reducers';
+import { ProductsReducer } from '../products/reducers';
 
 export type RootState = {
   users: ReturnType<typeof UsersReducer>;
+  products: ReturnType<typeof ProductsReducer>;
   router: ReturnType<typeof connectRouter>;
 }
 // history: パスの情報が入ったもの
@@ -22,7 +24,8 @@ const createStore = (history: History) => {
     combineReducers({
       // パスの情報をstoreで管理できるように
       router: connectRouter(history),
-      users: UsersReducer
+      users: UsersReducer,
+      products: ProductsReducer
     }),
     // ルーターをmiddlewareとして使用することを宣言
     applyMiddleware(

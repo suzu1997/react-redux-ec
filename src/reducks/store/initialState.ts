@@ -4,7 +4,7 @@
 const initialState = {
   // カテゴリに分けて、オブジェクトで記述
   products: {
-
+    list: [],
   },
   users: {
     isSignedIn: false,
