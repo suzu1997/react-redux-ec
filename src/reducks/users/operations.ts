@@ -1,6 +1,6 @@
 import { push } from 'connected-react-router';
 import type { Dispatch } from 'redux';
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from '@firebase/auth';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, sendPasswordResetEmail } from '@firebase/auth';
 import { auth, db, FirebaseTimestamp } from '../../firebase';
 import { getDoc, setDoc, doc } from "firebase/firestore";
 import { signInAction, signOutAction } from './actions';
@@ -30,6 +30,22 @@ export const ListenAuthState = () => {
         dispatch(push('/signin'));
       }
     });
+  }
+}
+
+export const resetPassword = (email: string) => {
+  return async (dispatch: Dispatch) => {
+     // validation
+     if (email === '') {
+      alert('必須項目が未入力です');
+      return;
+    }
+    sendPasswordResetEmail(auth, email).then(() => {
+      alert('入力されたアドレスにパスワードリセット用のメールを送信しました。');
+      dispatch(push('/signin'));
+    }).catch(() => {
+      alert('パスワードリセットに失敗しました。通信状態を確認してください。');
+    })
   }
 }
 
