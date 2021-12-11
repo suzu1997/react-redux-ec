@@ -105,6 +105,7 @@ const ProductEdit: VFC = () => {
             onClick={() =>
               dispatch(
                 saveProduct(
+                  images,
                   productName,
                   productDescription,
                   category,

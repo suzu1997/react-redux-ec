@@ -13,6 +13,7 @@ export type Product = {
   category: string;
   gender: string;
   price: string;
+  images: Array<Image>
 }
 
 export type Image = {
