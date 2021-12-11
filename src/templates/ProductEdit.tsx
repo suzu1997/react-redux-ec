@@ -5,10 +5,13 @@ import { TextInput } from '../components/Uikit/TextInput';
 import { SelectBox } from '../components/Uikit/SelectBox';
 import { PrimaryButton } from '../components/Uikit/PrimaryButton';
 import { saveProduct } from '../reducks/products/operations';
+import { ImageArea } from '../components/Products/ImageArea';
+import { Image } from '../reducks/products/types';
 
 const ProductEdit: VFC = () => {
   const dispatch = useDispatch();
 
+  const [images, setImages] = useState<Array<Image>>([]);
   const [productName, setProductName] = useState<string>('');
   const [productDescription, setProductDescription] = useState<string>('');
   const [category, setCategory] = useState<string>('');
@@ -50,6 +53,7 @@ const ProductEdit: VFC = () => {
     <section>
       <h2 className='u-text__headline u-text-center'>商品の登録・編集</h2>
       <div className='c-section-container'>
+        <ImageArea images={images} setImages={setImages}/>
         <TextInput
           fullWidth={true}
           label={'商品名'}
