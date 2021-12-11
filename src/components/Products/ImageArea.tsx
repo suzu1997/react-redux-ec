@@ -4,7 +4,7 @@ import AddPhotoAlternateIcon from '@material-ui/icons/AddPhotoAlternate';
 import { makeStyles } from '@material-ui/core';
 import { Image } from '../../reducks/products/types';
 import { storage } from '../../firebase';
-import { getDownloadURL, ref, uploadBytes } from '@firebase/storage';
+import { deleteObject, getDownloadURL, ref, uploadBytes } from '@firebase/storage';
 import { ImagePreview } from './ImagePreview';
 
 type Props = {
@@ -22,6 +22,25 @@ const useStyles = makeStyles({
 // 画像用コンポーネント
 export const ImageArea: VFC<Props> = (props) => {
   const classes = useStyles(); 
+
+  // 画像を削除する
+  // 引数に、削除する画像のIDを受け取る
+  const deleteImage = useCallback((id: string) => {
+    const ret = window.confirm('この画像を削除しますか？');
+    
+    if (!ret) {
+      // キャンセルを押したとき
+      return;
+    } else {
+      // OKを押したとき
+      // 削除しない画像のみのリストを作成する
+      const newImages = props.images.filter(image => image.id !== id);
+      props.setImages(newImages);
+      // storageから画像を削除
+      const deleteRef = ref(storage, 'images/' + id);
+      return deleteObject(deleteRef);
+    }
+  }, [props]);
 
   // Cloud Storageに画像をアップロードする
   const uploadImage = useCallback(
@@ -65,7 +84,7 @@ export const ImageArea: VFC<Props> = (props) => {
       <div className='p-grid__list-images'>
         {props.images.length > 0 &&
           props.images.map((image) => (
-            <ImagePreview id={image.id} path={image.path} key={image.id} />
+            <ImagePreview delete={deleteImage} id={image.id} path={image.path} key={image.id} />
           ))}
       </div>
       <div className='u-text-right'>
