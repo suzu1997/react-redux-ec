@@ -131,7 +131,7 @@ export const SetSizeArea: VFC<Props> = (props) => {
               ))}
           </TableBody>
         </Table>
-        <div>
+        <div className='center'>
           <TextInput
             fullWidth={false}
             label={'サイズ'}
