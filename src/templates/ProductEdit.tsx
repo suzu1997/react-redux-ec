@@ -6,7 +6,8 @@ import { SelectBox } from '../components/Uikit/SelectBox';
 import { PrimaryButton } from '../components/Uikit/PrimaryButton';
 import { saveProduct } from '../reducks/products/operations';
 import { ImageArea } from '../components/Products/ImageArea';
-import { Image } from '../reducks/products/types';
+import { doc, getDoc } from '@firebase/firestore';
+import { db } from '../firebase';
 
 const ProductEdit: VFC = () => {
   const dispatch = useDispatch();
@@ -48,6 +49,29 @@ const ProductEdit: VFC = () => {
     { id: 'men', name: 'メンズ' },
     { id: 'women', name: 'レディース' },
   ];
+
+  // URLから変数:idを判定する
+  let id = window.location.pathname.split('/product/edit')[1];
+  if (id !== '') {
+    id = id.split('/')[1];
+  }
+  useEffect(() => {
+    // idがあれば、idにマッチする商品情報を取得して表示
+    if (id !== '') {
+      getDoc(doc(db, 'products', id)).then((snapshot) => {
+        const product = snapshot.data();
+        if (product) {
+          setImages(product.images);
+          setProductName(product.name);
+          setProductDescription(product.description);
+          setCategory(product.category);
+          setGender(product.gender);
+          setPrice(product.price);
+          setSizes(product.sizes);
+        }
+      });
+    }
+  }, [id]);
 
   return (
     <section>
@@ -105,6 +129,7 @@ const ProductEdit: VFC = () => {
             onClick={() =>
               dispatch(
                 saveProduct(
+                  id,
                   images,
                   productName,
                   productDescription,

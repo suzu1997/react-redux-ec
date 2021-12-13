@@ -12,7 +12,9 @@ export const Router = () => {
       {/* 認証が必要なページをAuthコンポーネントで囲んで監視 */}
       <Auth>
         <Route exact path={'(/)?'} component={Home} />
-        <Route exact path={'/product/edit'} component={ProductEdit} />
+        {/* /product/editは商品の新規追加URL */}
+        {/* /product/edit/:id は既存商品の編集URL*/}
+        <Route path={'/product/edit(/:id)?'} component={ProductEdit} />
       </Auth>
     </Switch>
   );
