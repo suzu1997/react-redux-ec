@@ -40,7 +40,7 @@ const useStyles = makeStyles({
 
 export const SetSizeArea: VFC<Props> = (props) => {
   const classes = useStyles();
-
+  // indexで新規or編集を管理する
   const [index, setIndex] = useState<number>(0);
   const [size, setSize] = useState<string>('');
   const [quantity, setQuantity] = useState<string>('0');
@@ -92,7 +92,7 @@ export const SetSizeArea: VFC<Props> = (props) => {
   };
 
   // props.sizes.lengthが変わったときにindexを変更
-  // 既存商品編集の際、０ではなく、props.sizes.lengthになるように。
+  // 新規追加の際は0、既存商品追加の際はサイズの要素数
   useEffect(() => {
     setIndex(props.sizes.length);
   }, [props.sizes.length]);
