@@ -14,9 +14,15 @@ export type Product = {
   gender: string;
   price: string;
   images: Array<Image>
+  sizes: Array<Size>
 }
 
 export type Image = {
   id: string;
   path: string;
+}
+
+export type Size = {
+  size: string;
+  quantity: string;
 }

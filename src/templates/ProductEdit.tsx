@@ -1,4 +1,4 @@
-import { useCallback, useState, VFC } from 'react';
+import { useCallback, useEffect, useState, VFC } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { TextInput } from '../components/Uikit/TextInput';
@@ -6,8 +6,10 @@ import { SelectBox } from '../components/Uikit/SelectBox';
 import { PrimaryButton } from '../components/Uikit/PrimaryButton';
 import { saveProduct } from '../reducks/products/operations';
 import { ImageArea } from '../components/Products/ImageArea';
+import { Image, Size } from '../reducks/products/types';
 import { doc, getDoc } from '@firebase/firestore';
 import { db } from '../firebase';
+import { SetSizeArea } from '../components/Products/SetSizeArea';
 
 const ProductEdit: VFC = () => {
   const dispatch = useDispatch();
@@ -18,6 +20,7 @@ const ProductEdit: VFC = () => {
   const [category, setCategory] = useState<string>('');
   const [gender, setGender] = useState<string>('');
   const [price, setPrice] = useState<string>('');
+  const [sizes, setSizes] = useState<Array<Size>>([]);
 
   const inputProductName = useCallback(
     (e) => {
@@ -77,7 +80,7 @@ const ProductEdit: VFC = () => {
     <section>
       <h2 className='u-text__headline u-text-center'>商品の登録・編集</h2>
       <div className='c-section-container'>
-        <ImageArea images={images} setImages={setImages}/>
+        <ImageArea images={images} setImages={setImages} />
         <TextInput
           fullWidth={true}
           label={'商品名'}
@@ -122,7 +125,9 @@ const ProductEdit: VFC = () => {
           type={'number'}
           onChange={inputPrice}
         />
-        <div className='module-spacer--medium' />
+        <div className='module-spacer--small' />
+        <SetSizeArea sizes={sizes} setSizes={setSizes} />
+        <div className='module-spacer--small' />
         <div className='center'>
           <PrimaryButton
             label={'商品情報を保存'}
@@ -135,7 +140,8 @@ const ProductEdit: VFC = () => {
                   productDescription,
                   category,
                   gender,
-                  price
+                  price,
+                  sizes
                 )
               )
             }

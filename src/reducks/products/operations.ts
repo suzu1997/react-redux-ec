@@ -2,7 +2,7 @@ import type { Dispatch } from 'redux'
 import { db, FirebaseTimestamp } from '../../firebase'
 import { collection, setDoc, doc } from "firebase/firestore";
 import { push } from 'connected-react-router';
-import { Image } from './types';
+import { Image, Size } from './types';
 
 const productsRef = collection(db, "products");
 
@@ -11,7 +11,6 @@ export const saveProduct = (id: string, images: Array<Image>, name: string, desc
   return async (dispatch: Dispatch) => {
     // 現在の時刻をタイムスタンプ型で取得する
     const timestamp = FirebaseTimestamp.now();
-    console.log(timestamp);
 
     const data = {
       category,
@@ -20,6 +19,7 @@ export const saveProduct = (id: string, images: Array<Image>, name: string, desc
       images,
       name,
       price: parseInt(price, 10), // 10進数の数値に
+      sizes,
       updated_at: timestamp,
     }
 
