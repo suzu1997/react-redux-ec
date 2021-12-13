@@ -10,3 +10,12 @@ export const fetchProductsAction = (products: Array<any>) => {
   }
 }
 
+export const DELETE_PRODUCT = 'DELETE_PRODUCT';
+
+export const deleteProductAction = (products: Array<any>) => {
+  return {
+    type: 'DELETE_PRODUCT',
+    payload: products,
+  }
+}
+

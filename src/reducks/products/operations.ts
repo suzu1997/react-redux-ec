@@ -1,11 +1,25 @@
 import type { Dispatch } from 'redux'
 import { db, FirebaseTimestamp } from '../../firebase'
-import { collection, setDoc, getDocs, doc, orderBy, query } from "firebase/firestore";
+import { collection, setDoc, getDocs, doc, orderBy, query, deleteDoc } from "firebase/firestore";
 import { push } from 'connected-react-router';
 import { Image, Size } from './types';
-import { fetchProductsAction } from './actions';
+import { deleteProductAction, fetchProductsAction } from './actions';
+import { RootState } from '../store/store';
 
 const productsRef = collection(db, "products");
+
+// 商品を削除する
+export const deleteProduct = (id: string) => {
+  return async (dispatch: Dispatch, getState: () => RootState) => {
+    // データベースから削除
+    deleteDoc(doc(productsRef, id)).then(() => {
+      const prevProducts = getState().products.list;
+      // 削除した商品以外で、storeの商品リストを更新
+      const newProducts = prevProducts.filter((product: any) => product.id !== id);
+      dispatch(deleteProductAction(newProducts));
+    });
+  }
+}
 
 // firestoreから商品情報を取得する
 export const fetchProducts = () => {
