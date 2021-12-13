@@ -7,7 +7,11 @@ import { Action } from './types';
 export const ProductsReducer = (state = initialState.products, action: Action) => {
   // Actionsのtypeに応じてstateをどう変更するのか決める
   switch (action.type) {
-
+    case Actions.FETCH_PRODUCTS:
+      return {
+        ...state,
+        list: [...action.payload],
+      }
     default:
       return state;
   }
