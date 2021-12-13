@@ -36,8 +36,8 @@ export const ListenAuthState = () => {
 
 export const resetPassword = (email: string) => {
   return async (dispatch: Dispatch) => {
-     // validation
-     if (email === '') {
+    // validation
+    if (email === '') {
       alert('必須項目が未入力です');
       return;
     }
@@ -109,7 +109,6 @@ export const signUp = (username: string, email: string, password: string, confir
           updated_at: timestamp,
           username: username
         }
-        console.log({ userInitialDate });
 
         // ユーザー情報をデータベースに登録する
         setDoc(doc(db, 'users', uid), userInitialDate).then(() => {
