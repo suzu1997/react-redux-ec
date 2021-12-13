@@ -1,10 +1,27 @@
 import type { Dispatch } from 'redux'
 import { db, FirebaseTimestamp } from '../../firebase'
-import { collection, setDoc, doc } from "firebase/firestore";
+import { collection, setDoc, getDocs, doc, orderBy, query } from "firebase/firestore";
 import { push } from 'connected-react-router';
 import { Image, Size } from './types';
+import { fetchProductsAction } from './actions';
 
 const productsRef = collection(db, "products");
+
+// firestoreから商品情報を取得する
+export const fetchProducts = () => {
+  return async (dispatch: Dispatch) => {
+    const q = query(productsRef, orderBy('updated_at', 'desc'));
+    // firestoreからgetしたデータが全てsnapshotsには入ってくる
+    getDocs(q).then((snapshots) => {
+      const productList: any[] = [];
+
+      snapshots.forEach((snapshot) => {
+        productList.push(snapshot.data());
+      });
+      dispatch(fetchProductsAction(productList))
+    });
+  }
+}
 
 // 商品情報を保存する
 export const saveProduct = (id: string, images: Array<Image>, name: string, description: string, category: string, gender: string, price: string, sizes: Array<Size>) => {
