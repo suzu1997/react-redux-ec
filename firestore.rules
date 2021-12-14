@@ -10,6 +10,9 @@ service cloud.firestore {
       match/cart/{cartId} {
         allow read, write: if request.auth.uid == userId;
       }
+      match/orders/{orderId} {
+        allow read, write: if request.auth.uid == userId;
+      }
     }
     match /products/{productId} {
       allow read: if request.auth.uid != null;
