@@ -4,7 +4,7 @@ export type Action = {
 }
 
 export type ProductsState = {
-  list: Array<Product>;
+  list: Array<any>;
 }
 
 export type Product = {
@@ -25,4 +25,12 @@ export type Image = {
 export type Size = {
   size: string;
   quantity: string;
+}
+
+export type OrderProduct = {
+  id: string;
+  images: Array<Image>;
+  name: string;
+  price: number;
+  size: string;
 }
