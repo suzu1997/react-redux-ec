@@ -1,9 +1,16 @@
 import { Route, Switch } from 'react-router';
 
-import { SignIn, Home, SignUp, ResetPass, ProductEdit } from './templates';
+import {
+  SignIn,
+  SignUp,
+  ResetPass,
+  ProductEdit,
+  ProductList,
+  ProductDetail,
+  CartList,
+  OrderConfirm,
+} from './templates';
 import { Auth } from './Auth';
-import ProductList from './templates/ProductList';
-import ProductDetail from './templates/ProductDetail';
 
 export const Router = () => {
   return (
@@ -19,6 +26,8 @@ export const Router = () => {
         {/* /product/editは商品の新規追加URL */}
         {/* /product/edit/:id は既存商品の編集URL*/}
         <Route path={'/product/edit(/:id)?'} component={ProductEdit} />
+        <Route exact path={'/cart'} component={CartList} />
+        <Route exact path={'/order/confirm'} component={OrderConfirm} />
       </Auth>
     </Switch>
   );
