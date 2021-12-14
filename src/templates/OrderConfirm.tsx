@@ -1,11 +1,13 @@
 import { Divider, List, makeStyles } from '@material-ui/core';
-import { useMemo, VFC } from 'react';
+import { useCallback, useMemo, VFC } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { CartListItem } from '../components/Products/CartListItem';
 import { TextDetail } from '../components/Uikit/TextDetail';
+import { PrimaryButton } from '../components/Uikit/PrimaryButton';
 import { RootState } from '../reducks/store/store';
 import { getProductsInCart } from '../reducks/users/selectors';
 import type { ProductInCart } from '../reducks/users/types';
+import { orderProduct } from '../reducks/products/operations';
 
 const useStyles = makeStyles((theme) => ({
   detailBox: {
@@ -38,7 +40,7 @@ const OrderConfirm: VFC = () => {
 
   // 小計を計算
   // useMemoでメモ化
-  const subtotal = useMemo(() => {
+  const subtotal: number = useMemo(() => {
     return productsInCart.reduce(
       (sum: number, product: ProductInCart) => (sum += product.price),
       0
@@ -55,6 +57,10 @@ const OrderConfirm: VFC = () => {
 
   // 合計金額を計算
   const total = subtotal + shippingFee + tax;
+
+  const order = useCallback(() => {
+    dispatch(orderProduct(productsInCart, total));
+  }, [productsInCart, total, dispatch]);
 
   return (
     <section className='c-section-wrapin'>
@@ -83,6 +89,7 @@ const OrderConfirm: VFC = () => {
             label={'合計(税込)'}
             value={`¥${total.toLocaleString()}`}
           />
+          <PrimaryButton label={'注文する'} onClick={order} />
         </div>
       </div>
     </section>
