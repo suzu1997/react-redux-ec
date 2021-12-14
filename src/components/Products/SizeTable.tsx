@@ -14,6 +14,7 @@ import { Size } from '../../reducks/products/types';
 
 type Props = {
   sizes: Array<Size>;
+  addProduct: (size: string) => void;
 };
 
 const useStyles = makeStyles({
@@ -41,9 +42,7 @@ export const SizeTable: VFC<Props> = (props) => {
                   <TableCell>残り{item.quantity}点</TableCell>
                   <TableCell className={classes.iconCell}>
                     {Number(item.quantity) > 0 ? (
-                      <IconButton
-                      // onClick={}
-                      >
+                      <IconButton onClick={() => props.addProduct(item.size)}>
                         <ShoppingCartIcon />
                       </IconButton>
                     ) : (

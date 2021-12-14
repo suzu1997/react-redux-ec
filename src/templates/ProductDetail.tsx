@@ -1,10 +1,12 @@
 import { doc, getDoc } from 'firebase/firestore';
-import { useEffect, useState, VFC } from 'react';
-import { db } from '../firebase';
+import { useCallback, useEffect, useState, VFC } from 'react';
+import { db, FirebaseTimestamp } from '../firebase';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import HTMLReactParser from 'html-react-parser';
 import { ImageSwiper } from '../components/Products/ImageSwiper';
 import { SizeTable } from '../components/Products/SizeTable';
+import { useDispatch } from 'react-redux';
+import { addProductToCart } from '../reducks/users/operations';
 
 const useStyles = makeStyles((theme) => ({
   slideBox: {
@@ -51,6 +53,7 @@ const returnCodeToBr = (text: string) => {
 
 const ProductDetail: VFC = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
 
   let id = window.location.pathname.split('/product')[1];
   if (id !== '') {
@@ -66,6 +69,21 @@ const ProductDetail: VFC = () => {
     });
   }, [id]);
 
+  const addProduct = useCallback((selectedSize) => {
+    const timestamp = FirebaseTimestamp.now();
+    dispatch(addProductToCart({
+      added_at: timestamp,
+      description: product.description,
+      gender: product.gender,
+      images: product.images,
+      name: product.name,
+      price: product.price,
+      productId: product.id,
+      quantity: 1,
+      size: selectedSize,
+    }))
+  }, [product, dispatch]);
+
   return (
     <section className='c-section-wrapin'>
       {product && (
@@ -77,7 +95,7 @@ const ProductDetail: VFC = () => {
             <h2 className='u-text__headline'>{product.name}</h2>
             <p className={classes.price}>¥{product.price.toLocaleString()}</p>
             <div className='module-spacer--small'></div>
-            <SizeTable sizes={product.sizes} />
+            <SizeTable sizes={product.sizes} addProduct={addProduct} />
             <div className='module-spacer--small'></div>
             <p>{returnCodeToBr(product.description)}</p>
           </div>

@@ -2,8 +2,33 @@ import { push } from 'connected-react-router';
 import type { Dispatch } from 'redux';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, sendPasswordResetEmail } from '@firebase/auth';
 import { auth, db, FirebaseTimestamp } from '../../firebase';
-import { getDoc, setDoc, doc } from "firebase/firestore";
-import { signInAction, signOutAction } from './actions';
+import { getDoc, setDoc, doc, collection } from "firebase/firestore";
+import { fetchProductsInCartAction, signInAction, signOutAction } from './actions';
+import { RootState } from '../store/store';
+import { ProductInCart } from './types';
+
+// ショッピングカートに商品を追加する
+export const addProductToCart = (data: any) => {
+  return async (dispatch: Dispatch, getState: () => RootState) => {
+    const uid = getState().users.uid;
+    // 'cart' : ユーザーの持つサブコレクション
+    const cartRef = doc(collection(db, 'users', uid, 'cart'));
+
+    const addedProduct: ProductInCart = {
+      ...data,
+      cartId: cartRef.id
+    }
+    await setDoc(cartRef, addedProduct);
+    dispatch(push('/'));
+  }
+}
+
+// リスナーで監視したカート情報をストアに反映
+export const fetchProductsInCart = (products: Array<ProductInCart>) => {
+  return async (dispatch: Dispatch) => {
+    dispatch(fetchProductsInCartAction(products));
+  }
+}
 
 // 認証をリッスン(監視)する
 // 前回のセッションが残っていれば、自動でstoreに認証情報を追加して認証後画面に遷移
@@ -23,6 +48,7 @@ export const ListenAuthState = () => {
               role: userData.role,
               uid: uid,
               username: userData.username,
+              cart: userData.cart
             }))
           }
         });
@@ -73,6 +99,7 @@ export const signIn = (email: string, password: string) => {
               role: userData.role,
               uid: uid,
               username: userData.username,
+              cart: userData.cart
             }))
             dispatch(push('/'));
           }
