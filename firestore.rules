@@ -4,8 +4,12 @@ service cloud.firestore {
     match /users/{userId} {
       allow read: if request.auth.uid != null;
       allow create;
-      allow update: if request.auth.uid != userId;
-      allow delete: if request.auth.uid != userId;
+      allow update: if request.auth.uid == userId;
+      allow delete: if request.auth.uid == userId;
+
+      match/cart/{cartId} {
+        allow read, write: if request.auth.uid == userId;
+      }
     }
     match /products/{productId} {
       allow read: if request.auth.uid != null;
