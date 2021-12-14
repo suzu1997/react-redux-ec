@@ -1,10 +1,11 @@
 import { AppBar, makeStyles, Toolbar } from '@material-ui/core';
 import { push } from 'connected-react-router';
-import { VFC } from 'react';
+import { useCallback, useState, VFC } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import logo from '../../assets/img/header_logo.png';
 import { RootState } from '../../reducks/store/store';
 import { getIsSignedIn } from '../../reducks/users/selectors';
+import { ClosableDrawer } from './ClosableDrawer';
 import { HeaderMenus } from './HeaderMenus';
 
 const useStyles = makeStyles({
@@ -30,7 +31,19 @@ export const Header: VFC = () => {
 
   const dispatch = useDispatch();
   const selector = useSelector((state: RootState) => state);
+  // ログイン状態を取得
   const isSignedIn = getIsSignedIn(selector);
+  // ドロワーの開閉状態
+  const [open, setopen] = useState<boolean>(false);
+
+  // ドロワーメニューを開閉する
+  const handleDrawerToggle = useCallback((e) => {
+    // TabかShiftを押しても閉じないように
+    if (e.type === 'keydown' && (e.key === 'Tab' || e.key === 'Shift')) {
+      return;
+    }
+    setopen(!open);
+  }, [open, setopen]);
 
   return (
     <header className={classes.root}>
@@ -44,10 +57,11 @@ export const Header: VFC = () => {
           />
           {isSignedIn && (
             <div className={classes.iconButtons}>
-              <HeaderMenus />
+              <HeaderMenus handleDrawerToggle={handleDrawerToggle}/>
             </div>
           )}
         </Toolbar>
+        <ClosableDrawer open={open} onClose={handleDrawerToggle} />
       </AppBar>
     </header>
   );

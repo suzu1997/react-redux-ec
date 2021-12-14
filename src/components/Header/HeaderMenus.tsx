@@ -5,7 +5,11 @@ import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import MenuIcon from '@material-ui/icons/Menu';
 
-export const HeaderMenus: VFC = () => {
+type Props = {
+  handleDrawerToggle: (e: any) => void;
+};
+
+export const HeaderMenus: VFC<Props> = (props) => {
   return (
     <>
       <IconButton>
@@ -16,7 +20,7 @@ export const HeaderMenus: VFC = () => {
       <IconButton>
         <FavoriteBorderIcon />
       </IconButton>
-      <IconButton>
+      <IconButton onClick={(e) => props.handleDrawerToggle(e)}>
         <MenuIcon />
       </IconButton>
     </>
