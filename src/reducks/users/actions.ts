@@ -1,7 +1,19 @@
-import { UserState } from './types';
+import { ProductInCart, UserState } from './types';
 
 // Action typeを定義してexport
 // reducersでインポートして伝える
+export const FETCH_PRODUCTS_IN_CART = 'FETCH_PRODUCTS_IN_CART';
+
+export const fetchProductsInCartAction = (products: Array<ProductInCart>) => {
+  
+  // プレーンなオブジェクトを返す
+  return {
+    // typeとpayloadを記述する
+    type: 'FETCH_PRODUCTS_IN_CART',
+    payload: products
+  }
+};
+
 export const SIGN_IN = 'SIGN_IN';
 
 export const signInAction = (userState: UserState) => {
@@ -13,7 +25,7 @@ export const signInAction = (userState: UserState) => {
       isSignedIn: true,
       role: userState.role,
       uid: userState.uid,
-      username: userState.username
+      username: userState.username,
     }
   }
 };
@@ -29,7 +41,7 @@ export const signOutAction = () => {
       isSignedIn: false,
       role: '',
       uid: '',
-      username: ''
+      username: '',
     }
   }
 }
