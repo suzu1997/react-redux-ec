@@ -75,14 +75,14 @@ export const ClosableDrawer: VFC<Props> = (props) => {
     {
       func: selectMenu,
       label: 'メンズ',
-      id: 'male',
-      value: '/?gender=male', // 遷移先のパス
+      id: 'men',
+      value: '/?gender=men', // 遷移先のパス
     },
     {
       func: selectMenu,
       label: 'レディース',
-      id: 'female',
-      value: '/?gender=female', // 遷移先のパス
+      id: 'women',
+      value: '/?gender=women', // 遷移先のパス
     },
   ]);
 
