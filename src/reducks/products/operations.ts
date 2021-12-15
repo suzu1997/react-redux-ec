@@ -1,6 +1,6 @@
 import type { Dispatch } from 'redux'
 import { db, FirebaseTimestamp } from '../../firebase'
-import { collection, setDoc, getDocs, doc, orderBy, query, deleteDoc, writeBatch, getDoc } from "firebase/firestore";
+import { collection, setDoc, getDocs, doc, orderBy, query, deleteDoc, writeBatch, getDoc, where } from "firebase/firestore";
 import { push } from 'connected-react-router';
 import type { Image, OrderProduct, Size } from './types';
 import { deleteProductAction, fetchProductsAction } from './actions';
@@ -23,9 +23,16 @@ export const deleteProduct = (id: string) => {
 }
 
 // firestoreから商品情報を取得する
-export const fetchProducts = () => {
+export const fetchProducts = (gender: string, category: string) => {
   return async (dispatch: Dispatch) => {
-    const q = query(productsRef, orderBy('updated_at', 'desc'));
+    let q = query(productsRef, orderBy('updated_at', 'desc'));
+    if (gender !== '') {
+      q = query(productsRef, where('gender', '==', gender), orderBy('updated_at', 'desc'));
+    }
+    if (category !== '') {
+      q = query(productsRef, where('category', '==', category), orderBy('updated_at', 'desc'))
+    }
+
     // firestoreからgetしたデータが全てsnapshotsには入ってくる
     getDocs(q).then((snapshots) => {
       const productList: any[] = [];

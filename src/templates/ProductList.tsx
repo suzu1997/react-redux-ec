@@ -10,18 +10,31 @@ const ProductList: VFC = () => {
   const selector = useSelector((state: RootState) => state);
   const products = getProductList(selector);
 
+  // URLからクエリパラメータを取得
+  const query = selector.router.location.search;
+
+  // クエリパラメータの先頭が?gender=なら、クエリをsplitしてジェンダーフィルターを取得
+  const gender = /^\?gender=/.test(query) ? query.split('?gender=')[1] : '';
+
+  // クエリパラメータの先頭が?category=なら、クエリをsplitしてカテゴリフィルターを取得
+  const category = /^\?category=/.test(query)
+    ? query.split('?category=')[1]
+    : '';
+
+  console.log({ gender });
+  console.log({ category });
+
   useEffect(() => {
-    dispatch(fetchProducts());
-  }, [dispatch]);
+    dispatch(fetchProducts(gender, category));
+  }, [dispatch, gender, category]);
 
   return (
     <section className='c-section-wrapin'>
       <div className='p-grid__row'>
         {products.length > 0 &&
           products.map((product) => (
-             <ProductCard product={product} key={product.id} />
-          ))
-        }
+            <ProductCard product={product} key={product.id} />
+          ))}
       </div>
     </section>
   );
