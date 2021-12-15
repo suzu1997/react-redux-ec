@@ -90,7 +90,6 @@ const ProductEdit: VFC = () => {
         });
       });
       setCategoris(categories);
-      console.log(categories);
     });
   }, []);
 
