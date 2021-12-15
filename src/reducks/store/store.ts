@@ -3,7 +3,7 @@ import {
   combineReducers,
   applyMiddleware
 } from 'redux';
-import { connectRouter, routerMiddleware } from 'connected-react-router';
+import { connectRouter, routerMiddleware, RouterState } from 'connected-react-router';
 import { History } from 'history';
 import thunk from 'redux-thunk';
 
@@ -13,7 +13,7 @@ import { ProductsReducer } from '../products/reducers';
 export type RootState = {
   users: ReturnType<typeof UsersReducer>;
   products: ReturnType<typeof ProductsReducer>;
-  router: ReturnType<typeof connectRouter>;
+  router: RouterState;
 }
 // history: パスの情報が入ったもの
 const createStore = (history: History) => {
