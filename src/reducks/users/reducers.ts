@@ -7,6 +7,11 @@ import { Action } from './types';
 export const UsersReducer = (state = initialState.users, action: Action) => {
   // Actionsのtypeに応じてstateをどう変更するのか決める
   switch (action.type) {
+    case Actions.FETCH_ORDERS_HISTORY:
+      return {
+        ...state,
+        orders: [...action.payload],
+      }
     case Actions.FETCH_PRODUCTS_IN_CART:
       return {
         ...state,

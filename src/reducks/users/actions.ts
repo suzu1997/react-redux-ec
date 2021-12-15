@@ -1,4 +1,16 @@
-import { ProductInCart, UserState } from './types';
+import { Order, ProductInCart, UserState } from './types';
+
+export const FETCH_ORDERS_HISTORY = 'FETCH_ORDERS_HISTORY';
+
+export const fetchOrdersHisrtoryAction = (history: Array<Order>) => {
+  
+  // プレーンなオブジェクトを返す
+  return {
+    // typeとpayloadを記述する
+    type: 'FETCH_ORDERS_HISTORY',
+    payload: history
+  }
+};
 
 // Action typeを定義してexport
 // reducersでインポートして伝える

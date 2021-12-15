@@ -2,8 +2,8 @@ import { push } from 'connected-react-router';
 import type { Dispatch } from 'redux';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, sendPasswordResetEmail } from '@firebase/auth';
 import { auth, db, FirebaseTimestamp } from '../../firebase';
-import { getDoc, setDoc, doc, collection } from "firebase/firestore";
-import { fetchProductsInCartAction, signInAction, signOutAction } from './actions';
+import { getDoc, setDoc, doc, collection, query, orderBy, getDocs } from "firebase/firestore";
+import { fetchOrdersHisrtoryAction, fetchProductsInCartAction, signInAction, signOutAction } from './actions';
 import { RootState } from '../store/store';
 import { ProductInCart } from './types';
 
@@ -20,6 +20,24 @@ export const addProductToCart = (data: any) => {
     }
     await setDoc(cartRef, addedProduct);
     dispatch(push('/'));
+  }
+}
+
+// 注文履歴を取得する
+export const fetchOrdersHistory = () => {
+  return async (dispatch: Dispatch, getState: () => RootState) => {
+    const uid = getState().users.uid;
+    const list: Array<any> = [];
+
+    const ordersRef = collection(db, 'users', uid, 'orders');
+    const q = query(ordersRef, orderBy('updated_at', 'desc'));
+    getDocs(q).then((snapshots) => {
+      snapshots.forEach((snapshot) => {
+        const data = snapshot.data();
+        list.push(data);
+      })
+      dispatch(fetchOrdersHisrtoryAction(list));
+    });
   }
 }
 
@@ -48,7 +66,8 @@ export const ListenAuthState = () => {
               role: userData.role,
               uid: uid,
               username: userData.username,
-              cart: userData.cart
+              cart: userData.cart,
+              orders: userData.orders
             }))
           }
         });
@@ -99,7 +118,8 @@ export const signIn = (email: string, password: string) => {
               role: userData.role,
               uid: uid,
               username: userData.username,
-              cart: userData.cart
+              cart: userData.cart,
+              orders: userData.orders
             }))
             dispatch(push('/'));
           }
