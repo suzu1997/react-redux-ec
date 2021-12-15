@@ -20,5 +20,11 @@ service cloud.firestore {
       allow update: if request.auth.uid != null;
       allow delete: if request.auth.uid != null;
     }
+    match /categories/{categoryId} {
+      allow read: if request.auth.uid != null;
+      allow create: if request.auth.uid != null;
+      allow update: if request.auth.uid != null;
+      allow delete: if request.auth.uid != null;
+    }
   }
 }
