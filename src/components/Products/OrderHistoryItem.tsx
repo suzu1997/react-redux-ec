@@ -27,15 +27,15 @@ export const OrderHistoryItem: VFC<Props> = (props) => {
 
   return (
     <div>
-      <div className='module-spacer--small' />
+      <div className='h-5 sm:h-8' />
       <TextDetail label={'注文ID'} value={order.id} />
       <TextDetail label={'注文日時'} value={orderedDateTime} />
       <TextDetail label={'発送予定日'} value={ShippingDate} />
       <TextDetail label={'注文金額'} value={price} />
-      <div className='module-spacer--extra-extra-small' />
+      <div className='h-3 sm:h-4' />
       {order.products.length > 0 && (
         <OrderedProducts products={order.products} />
       )}
     </div>
   );
-};
+}

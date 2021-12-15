@@ -63,9 +63,9 @@ const OrderConfirm: VFC = () => {
   }, [productsInCart, total, dispatch]);
 
   return (
-    <section className='c-section-wrapin'>
-      <h2 className='u-text__headline'>注文の確認</h2>
-      <div className='p-grid__row'>
+    <section className='mx-auto my-0 max-w-xl relative py-0 px-4 text-center w-full sm:max-w-5xl'>
+      <h2 className='text-blue-500 text-2xl mt-0 mx-auto mb-4'>注文の確認</h2>
+      <div className='flex flex-row flex-wrap'>
         <div className={classes.detailBox}>
           <List>
             {productsInCart.length > 0 &&

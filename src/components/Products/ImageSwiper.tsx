@@ -26,13 +26,24 @@ export const ImageSwiper: VFC<Props> = (props) => {
   return (
     <Swiper {...params}>
       {props.images.length === 0 ? (
-        <div className='p-media__thumb'>
-          <img src={NoImage} alt='イメージなし' />
+        <div className='relative overflow-hidden w-full before:block before:pt-full'>
+          <img
+            src={NoImage}
+            alt='イメージなし'
+            className='absolute object-cover object-center top-0 left-0 w-full h-auto'
+          />
         </div>
       ) : (
         props.images.map((image: Image) => (
-          <div key={image.id} className='p-media__thumb'>
-            <img src={image.path} alt={'商品画像'} />
+          <div
+            key={image.id}
+            className='relative overflow-hidden w-full before:block before:pt-full'
+          >
+            <img
+              src={image.path}
+              alt={'商品画像'}
+              className='absolute object-cover object-center top-0 left-0 w-full h-auto'
+            />
           </div>
         ))
       )}

@@ -81,19 +81,19 @@ export const ImageArea: VFC<Props> = (props) => {
 
   return (
     <div>
-      <div className='p-grid__list-images'>
+      <div className='flex flex-wrap gap-2 text-center'>
         {props.images.length > 0 &&
           props.images.map((image) => (
             <ImagePreview delete={deleteImage} id={image.id} path={image.path} key={image.id} />
           ))}
       </div>
-      <div className='u-text-right'>
+      <div className='text-right'>
         <span>商品画像を登録する</span>
         <IconButton className={classes.icon}>
           <label>
             <AddPhotoAlternateIcon />
             <input
-              className='u-display-none'
+              className='hidden'
               type='file'
               id='image'
               onChange={(e) => {

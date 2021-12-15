@@ -95,8 +95,10 @@ const ProductEdit: VFC = () => {
 
   return (
     <section>
-      <h2 className='u-text__headline u-text-center'>商品の登録・編集</h2>
-      <div className='c-section-container'>
+      <h2 className='text-blue-500 text-2xl mt-0 mx-auto mb-4 text-center'>
+        商品の登録・編集
+      </h2>
+      <div className='mx-auto my-0 max-w-md p-4 h-auto w-[calc(100%_-_2rem)]'>
         <ImageArea images={images} setImages={setImages} />
         <TextInput
           fullWidth={true}
@@ -142,10 +144,10 @@ const ProductEdit: VFC = () => {
           type={'number'}
           onChange={inputPrice}
         />
-        <div className='module-spacer--small' />
+        <div className='h-5 sm:h-8' />
         <SetSizeArea sizes={sizes} setSizes={setSizes} />
-        <div className='module-spacer--small' />
-        <div className='center'>
+        <div className='h-5 sm:h-8' />
+        <div className='mx-auto my-0 text-center'>
           <PrimaryButton
             label={'商品情報を保存'}
             onClick={() =>

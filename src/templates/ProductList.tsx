@@ -29,8 +29,8 @@ const ProductList: VFC = () => {
   }, [dispatch, gender, category]);
 
   return (
-    <section className='c-section-wrapin'>
-      <div className='p-grid__row'>
+    <section className='mx-auto my-0 max-w-xl relative py-0 px-4 text-center w-full sm:max-w-5xl'>
+      <div className='flex flex-row flex-wrap'>
         {products.length > 0 &&
           products.map((product) => (
             <ProductCard product={product} key={product.id} />

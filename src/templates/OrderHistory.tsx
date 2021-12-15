@@ -36,8 +36,8 @@ const OrderHistory = () => {
   console.log(orders);
 
   return (
-    <section className='c-section-wrapin'>
-      <h2 className='u-text__headline'>注文履歴</h2>
+    <section className='mx-auto my-0 max-w-xl relative py-0 px-4 text-center w-full sm:max-w-5xl'>
+      <h2 className='text-blue-500 text-2xl mt-0 mx-auto mb-4'>注文履歴</h2>
       <List className={classes.orderList}>
         {orders.length > 0 &&
           orders.map((order: Order) => (

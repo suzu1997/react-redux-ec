@@ -34,18 +34,20 @@ const CartList: VFC = () => {
   }, [dispatch]);
 
   return (
-    <section className='c-section-wrapin'>
-      <h2 className='u-text__headline'>ショッピングカート</h2>
+    <section className='mx-auto my-0 max-w-xl relative py-0 px-4 text-center w-full sm:max-w-5xl'>
+      <h2 className='text-blue-500 text-2xl mt-0 mx-auto mb-4'>
+        ショッピングカート
+      </h2>
       <List className={classes.root}>
         {productsInCart.length > 0 &&
           productsInCart.map((product: ProductInCart) => (
             <CartListItem product={product} key={product.cartId} />
           ))}
       </List>
-      <div className='module-spacer--medium' />
-      <div className='p-grid__column'>
+      <div className='h-8 sm:h-12' />
+      <div className='items-center flex flex-col'>
         <PrimaryButton label={'レジへ進む'} onClick={goToOrder} />
-        <div className='module-spacer--extra-extra-small' />
+        <div className='h-3 sm:h-4' />
         <GreyButton label={'ショッピングを続ける'} onClick={backToHome} />
       </div>
     </section>

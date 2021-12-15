@@ -25,10 +25,10 @@ const SignIn: VFC = () => {
   );
 
   return (
-    <div className='c-section-container'>
-      <h2 className='u-text__headline u-text-center'>サインイン</h2>
-      <div className='module-spacer--medium' />
-
+    <div className='mx-auto my-0 max-w-md p-4 h-auto w-[calc(100%_-_2rem)]'>
+      <h2 className='text-blue-500 text-2xl mt-0 mx-auto mb-12 text-center'>
+        サインイン
+      </h2>
       <TextInput
         fullWidth={true}
         label={'メールアドレス'}
@@ -49,8 +49,8 @@ const SignIn: VFC = () => {
         type={'password'}
         onChange={inputPassword}
       />
-      <div className='module-spacer--medium' />
-      <div className='center'>
+      <div className='h-8 sm:h-12' />
+      <div className='mx-auto my-0 text-center'>
         <PrimaryButton
           label='SIGN IN'
           onClick={() => dispatch(signIn(email, password))}

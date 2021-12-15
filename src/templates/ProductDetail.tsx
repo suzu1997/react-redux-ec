@@ -85,18 +85,18 @@ const ProductDetail: VFC = () => {
   }, [product, dispatch]);
 
   return (
-    <section className='c-section-wrapin'>
+    <section className='mx-auto my-0 max-w-xl relative py-0 px-4 text-center w-full sm:max-w-5xl'>
       {product && (
-        <div className='p-grid__row'>
+        <div className='flex flex-row flex-wrap'>
           <div className={classes.slideBox}>
             <ImageSwiper images={product.images} />
           </div>
           <div className={classes.detail}>
-            <h2 className='u-text__headline'>{product.name}</h2>
+            <h2 className='text-blue-500 text-2xl mt-0 mx-auto mb-4'>{product.name}</h2>
             <p className={classes.price}>¥{product.price.toLocaleString()}</p>
-            <div className='module-spacer--small'></div>
+            <div className='h-5 sm:h-8'></div>
             <SizeTable sizes={product.sizes} addProduct={addProduct} />
-            <div className='module-spacer--small'></div>
+            <div className='h-5 sm:h-8'></div>
             <p>{returnCodeToBr(product.description)}</p>
           </div>
         </div>

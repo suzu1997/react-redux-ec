@@ -39,9 +39,9 @@ const SignUp: VFC = () => {
   );
 
   return (
-    <div className='c-section-container'>
-      <h2 className='u-text__headline u-text-center'>アカウント登録</h2>
-      <div className='module-spacer--medium' />
+    <div className='mx-auto my-0 max-w-md p-4 h-auto w-[calc(100%_-_2rem)]'>
+      <h2 className='text-blue-500 text-2xl mt-0 mx-auto mb-4 text-center'>アカウント登録</h2>
+      <div className='h-8 sm:h-12' />
       <TextInput
         fullWidth={true}
         label={'ユーザー名'}
@@ -82,8 +82,8 @@ const SignUp: VFC = () => {
         type={'password'}
         onChange={inputConfirmPassword}
       />
-      <div className='module-spacer--medium' />
-      <div className='center'>
+      <div className='h-8 sm:h-12' />
+      <div className='mx-auto my-0 text-center'>
         <PrimaryButton
           label='アカウントを登録する'
           onClick={() =>
