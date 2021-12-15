@@ -1,13 +1,13 @@
 import { Router } from './Router';
-import './assets/reset.css';
-import './assets/style.css';
+import './index.css';
+import 'tailwindcss/tailwind.css';
 import { Header } from './components/Header/Header';
 
 const App = () => {
   return (
     <>
       <Header />
-      <main className='c-main'>
+      <main className='py-24'>
         <Router />
       </main>
     </>
