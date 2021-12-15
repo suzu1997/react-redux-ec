@@ -27,6 +27,12 @@ export type Size = {
   quantity: string;
 }
 
+export type Category = {
+  id: string;
+  name: string;
+  order: string;
+}
+
 export type OrderProduct = {
   id: string;
   images: Array<Image>;
