@@ -1,8 +1,7 @@
 import { VFC } from 'react';
-import Divider from '@material-ui/core/Divider';
 import { makeStyles } from '@material-ui/styles';
 import { ProductInCart } from '../../reducks/users/types';
-import { ListItem, ListItemText } from '@material-ui/core';
+import { Divider, ListItem, ListItemText } from '@material-ui/core';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import { IconButton } from '@mui/material';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -61,6 +60,7 @@ export const CartListItem: VFC<Props> = (props) => {
           <DeleteIcon />
         </IconButton>
       </ListItem>
+      <Divider />
     </>
   );
 };
