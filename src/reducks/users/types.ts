@@ -1,5 +1,5 @@
 import { Timestamp } from 'firebase/firestore'
-import { Image } from '../products/types'
+import { Image, OrderProduct } from '../products/types'
 
 export type Action = {
   type: string;
@@ -12,6 +12,7 @@ export type UserState = {
   username: string;
   role: string;
   cart: Array<ProductInCart>;
+  orders: Array<Order>
 }
 
 export type ProductInCart = {
@@ -25,4 +26,13 @@ export type ProductInCart = {
   productId: string,
   quantity: number,
   size: string,
+}
+
+export type Order = {
+  amount: number,
+  created_at: Timestamp,
+  id: string,
+  products: Array<OrderProduct>
+  shipping_date: Timestamp,
+  updated_at: Timestamp,
 }
