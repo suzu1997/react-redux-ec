@@ -13,12 +13,14 @@ import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import HistoryIcon from '@mui/icons-material/History';
 import PersonIcon from '@mui/icons-material/History';
-import { useCallback, useState, VFC } from 'react';
+import { useCallback, useEffect, useState, VFC } from 'react';
 
 import { TextInput } from '../Uikit/TextInput';
 import { push } from 'connected-react-router';
 import { useDispatch } from 'react-redux';
 import { signOut } from '../../reducks/users/operations';
+import { collection, getDocs, orderBy, query } from 'firebase/firestore';
+import { db } from '../../firebase';
 
 type Props = {
   // container: any;
@@ -62,6 +64,27 @@ export const ClosableDrawer: VFC<Props> = (props) => {
     dispatch(push(path));
     props.onClose(e);
   };
+  // 検索フィルター
+  const [filters, setFilters] = useState([
+    {
+      func: selectMenu,
+      label: 'すべて',
+      id: 'all',
+      value: '/', // 遷移先のパス
+    },
+    {
+      func: selectMenu,
+      label: 'メンズ',
+      id: 'male',
+      value: '/?gender=male', // 遷移先のパス
+    },
+    {
+      func: selectMenu,
+      label: 'レディース',
+      id: 'female',
+      value: '/?gender=female', // 遷移先のパス
+    },
+  ]);
 
   const menus = [
     {
@@ -87,10 +110,27 @@ export const ClosableDrawer: VFC<Props> = (props) => {
     },
   ];
 
+  useEffect(() => {
+    const q = query(collection(db, 'categories'), orderBy('order', 'asc'));
+    getDocs(q).then((snapshots) => {
+      const list: Array<any> = [];
+      snapshots.forEach((snapshot) => {
+        const data = snapshot.data();
+        list.push({
+          func: selectMenu,
+          label: data.name,
+          id: data.id,
+          value: `/?category=${data.id}`,
+        });
+      });
+      setFilters((prevState) => [...prevState, ...list]);
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <nav className={classes.drawer}>
       <Drawer
-        // container={container}
         variant='temporary'
         anchor='right' // どちらから出るか
         open={props.open}
@@ -100,6 +140,9 @@ export const ClosableDrawer: VFC<Props> = (props) => {
       >
         <div
           onKeyDown={(e) => {
+            props.onClose(e);
+          }}
+          onClick={(e) => {
             props.onClose(e);
           }}
         >
@@ -143,6 +186,18 @@ export const ClosableDrawer: VFC<Props> = (props) => {
               </ListItemIcon>
               <ListItemText primary={'Logout'} />
             </ListItem>
+          </List>
+          <Divider />
+          <List>
+            {filters.map((filter) => (
+              <ListItem
+                button
+                key={filter.id}
+                onClick={(e) => filter.func(e, filter.value)}
+              >
+                <ListItemText primary={filter.label} />
+              </ListItem>
+            ))}
           </List>
         </div>
       </Drawer>
