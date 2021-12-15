@@ -131,7 +131,7 @@ export const SetSizeArea: VFC<Props> = (props) => {
               ))}
           </TableBody>
         </Table>
-        <div className='mx-auto my-0 text-center'>
+        <div className='flex mx-auto my-0 text-center py-4 pl-1'>
           <TextInput
             fullWidth={false}
             label={'サイズ'}
