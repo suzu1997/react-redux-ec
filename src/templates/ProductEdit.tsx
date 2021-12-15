@@ -6,8 +6,15 @@ import { SelectBox } from '../components/Uikit/SelectBox';
 import { PrimaryButton } from '../components/Uikit/PrimaryButton';
 import { saveProduct } from '../reducks/products/operations';
 import { ImageArea } from '../components/Products/ImageArea';
-import { Image, Size } from '../reducks/products/types';
-import { doc, getDoc } from '@firebase/firestore';
+import { Category, Image, Size } from '../reducks/products/types';
+import {
+  doc,
+  getDoc,
+  getDocs,
+  collection,
+  query,
+  orderBy,
+} from '@firebase/firestore';
 import { db } from '../firebase';
 import { SetSizeArea } from '../components/Products/SetSizeArea';
 
@@ -18,6 +25,7 @@ const ProductEdit: VFC = () => {
   const [productName, setProductName] = useState<string>('');
   const [productDescription, setProductDescription] = useState<string>('');
   const [category, setCategory] = useState<string>('');
+  const [categories, setCategoris] = useState<Array<Category>>([]);
   const [gender, setGender] = useState<string>('');
   const [price, setPrice] = useState<string>('');
   const [sizes, setSizes] = useState<Array<Size>>([]);
@@ -41,12 +49,6 @@ const ProductEdit: VFC = () => {
     [setPrice]
   );
 
-  const categories = [
-    { id: 'tops', name: 'トップス' },
-    { id: 'shirts', name: 'シャツ' },
-    { id: 'pants', name: 'パンツ' },
-    { id: 'skirt', name: 'スカート' },
-  ];
   const genders = [
     { id: 'all', name: 'すべて' },
     { id: 'men', name: 'メンズ' },
@@ -75,6 +77,22 @@ const ProductEdit: VFC = () => {
       });
     }
   }, [id]);
+
+  useEffect(() => {
+    const q = query(collection(db, 'categories'), orderBy('order', 'asc'));
+    getDocs(q).then((snapshots) => {
+      const categories: Array<any> = [];
+      snapshots.forEach((snapshot) => {
+        const data = snapshot.data();
+        categories.push({
+          id: data.id,
+          name: data.name,
+        });
+      });
+      setCategoris(categories);
+      console.log(categories);
+    });
+  }, []);
 
   return (
     <section>
