@@ -128,6 +128,17 @@ export const MenuColumn: VFC<Props> = (props) => {
 
   return (
     <div>
+      {props.onClose && (
+        <button
+          onClick={(e) => {
+            if (props.onClose) {
+              props.onClose(e);
+            }
+          }}
+          className='mt-3 ml-3 text-blue-900  rounded-md p-1'>
+          閉じる
+        </button>
+      )}
       <div className={classes.searchField}>
         <TextInput
           fullWidth={false}
