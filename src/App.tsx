@@ -4,6 +4,7 @@ import 'tailwindcss/tailwind.css';
 import { Header } from './components/Header/Header';
 import { MenuColumn } from './components/Products/MenuColumn';
 import { Footer } from './components/Footer/Footer';
+import banner from './assets/img/banner.jpg';
 
 const App = () => {
   return (
@@ -14,7 +15,9 @@ const App = () => {
           <MenuColumn />
         </div>
         <Router />
-        <div className='lg:w-60'/>
+        <div className='hidden lg:block lg:w-60 -mt-60'>
+          <img src={banner} alt='バナー' className='w-20 mx-auto' />
+        </div>
       </main>
       <Footer />
     </div>
