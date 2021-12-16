@@ -58,7 +58,7 @@ export const OrderedProducts: VFC<Props> = (props) => {
             </div>
             <PrimaryButton
               label={'商品の詳細を見る'}
-              onClick={() => dispatch(push(`/product/${product.id}`))}
+              onClick={() => dispatch(push(`/product/detail/${product.id}`))}
             />
           </ListItem>
           <Divider />

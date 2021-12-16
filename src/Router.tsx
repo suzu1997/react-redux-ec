@@ -23,10 +23,10 @@ export const Router = () => {
       <Auth>
         {/* ルートパスで商品一覧を表示 */}
         <Route exact path={'(/)?'} component={ProductList} />
-        <Route exact path={'/product/:id'} component={ProductDetail} />
+        <Route exact path="/product/detail/:id" component={ProductDetail} />
         {/* /product/editは商品の新規追加URL */}
         {/* /product/edit/:id は既存商品の編集URL*/}
-        <Route path={'/product/edit(/:id)?'} component={ProductEdit} />
+        <Route path="/product/edit(/:id)?" component={ProductEdit} />
         <Route exact path={'/cart'} component={CartList} />
         <Route exact path={'/order/confirm'} component={OrderConfirm} />
         <Route exact path={'/order/history'} component={OrderHistory} />

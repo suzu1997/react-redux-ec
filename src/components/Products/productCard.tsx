@@ -79,7 +79,7 @@ export const ProductCard: VFC<Props> = (props) => {
       <CardMedia
         className={classes.media}
         image={image}
-        onClick={() => dispatch(push('/product/' + props.product.id))}
+        onClick={() => dispatch(push('/product/detail/' + props.product.id))}
       />
       <CardContent className={classes.content}>
         <div>

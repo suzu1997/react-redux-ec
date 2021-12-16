@@ -55,7 +55,7 @@ const ProductDetail: VFC = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  let id = window.location.pathname.split('/product')[1];
+  let id = window.location.pathname.split('/product/detail')[1];
   if (id !== '') {
     id = id.split('/')[1];
   }
