@@ -94,7 +94,7 @@ const ProductEdit: VFC = () => {
   }, []);
 
   return (
-    <section>
+    <section className='mx-auto my-0 max-w-xl relative py-0 px-4 text-center w-full sm:max-w-5xl'>
       <h2 className='text-blue-500 text-2xl mt-0 mx-auto mb-4 text-center'>
         商品の登録・編集
       </h2>
