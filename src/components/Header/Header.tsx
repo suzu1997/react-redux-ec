@@ -52,7 +52,7 @@ export const Header: VFC = () => {
           <img
             src={logo}
             alt='logo'
-            width='150px'
+            width='100px'
             onClick={() => dispatch(push('/'))}
           />
           {isSignedIn && (
