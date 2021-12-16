@@ -16,10 +16,21 @@ type Props = {
   products: Array<OrderProduct>;
 };
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   list: {
-    height: 'auto',
-    backgroundColor: '#fff',
+    [theme.breakpoints.up('sm')]: {
+      height: 'auto',
+      backgroundColor: '#fff',
+      display: 'flex',
+      justifyContent: 'space-between',
+    },
+    [theme.breakpoints.down('sm')]: {
+      height: 'auto',
+      backgroundColor: '#fff',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'start',
+    },
   },
   image: {
     objectFit: 'cover',
@@ -30,7 +41,7 @@ const useStyles = makeStyles({
   text: {
     width: '100%',
   },
-});
+}));
 
 export const OrderedProducts: VFC<Props> = (props) => {
   const dispatch = useDispatch();
@@ -42,19 +53,21 @@ export const OrderedProducts: VFC<Props> = (props) => {
       {products.map((product, index) => (
         <div key={index}>
           <ListItem className={classes.list}>
-            <ListItemAvatar>
-              <img
-                className={classes.image}
-                src={product.images[0].path}
-                alt='商品画像'
-              />
-            </ListItemAvatar>
-            <div className={classes.text}>
-              <ListItemText
-                primary={product.name}
-                secondary={`サイズ:${product.size}`}
-              />
-              <ListItemText primary={`¥${product.price.toLocaleString()}`} />
+            <div className='flex'>
+              <ListItemAvatar>
+                <img
+                  className={classes.image}
+                  src={product.images[0].path}
+                  alt='商品画像'
+                />
+              </ListItemAvatar>
+              <div className={classes.text}>
+                <ListItemText
+                  primary={product.name}
+                  secondary={`サイズ:${product.size}`}
+                />
+                <ListItemText primary={`¥${product.price.toLocaleString()}`} />
+              </div>
             </div>
             <PrimaryButton
               label={'商品の詳細を見る'}
