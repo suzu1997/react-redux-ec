@@ -81,9 +81,11 @@ export const HeaderMenus: VFC<Props> = (props) => {
       <IconButton>
         <FavoriteBorderIcon />
       </IconButton>
-      <IconButton onClick={(e) => props.handleDrawerToggle(e)}>
-        <MenuIcon className={classes.menuIcon} />
-      </IconButton>
+      <span className='lg:hidden'>
+        <IconButton onClick={(e) => props.handleDrawerToggle(e)}>
+          <MenuIcon />
+        </IconButton>
+      </span>
     </>
   );
 };
