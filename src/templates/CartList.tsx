@@ -39,14 +39,19 @@ const CartList: VFC = () => {
         ショッピングカート
       </h2>
       <List className={classes.root}>
-        {productsInCart.length > 0 &&
+        {productsInCart.length > 0 ? (
           productsInCart.map((product: ProductInCart) => (
             <CartListItem product={product} key={product.cartId} />
-          ))}
+          ))
+        ) : (
+          <div>カート内に商品が入っていません</div>
+        )}
       </List>
       <div className='h-8 sm:h-12' />
       <div className='items-center flex flex-col'>
-        <PrimaryButton label={'レジへ進む'} onClick={goToOrder} />
+        {productsInCart.length > 0 && (
+          <PrimaryButton label={'レジへ進む'} onClick={goToOrder} />
+        )}
         <div className='h-3 sm:h-4' />
         <GreyButton label={'ショッピングを続ける'} onClick={backToHome} />
       </div>
