@@ -1,4 +1,4 @@
-import { Badge, makeStyles } from '@material-ui/core';
+import { Badge } from '@material-ui/core';
 import { IconButton } from '@mui/material';
 import { useEffect, VFC } from 'react';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
@@ -18,17 +18,7 @@ type Props = {
   handleDrawerToggle: (e: any) => void;
 };
 
-const useStyles = makeStyles((theme) => ({
-  menuIcon: {
-    [theme.breakpoints.up('md')]: {
-      display: 'none',
-    },
-  },
-}));
-
 export const HeaderMenus: VFC<Props> = (props) => {
-  const classes = useStyles();
-
   const dispatch = useDispatch();
   const selector = useSelector((state: RootState) => state);
   const uid = getUserId(selector);
