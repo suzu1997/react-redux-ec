@@ -1,5 +1,5 @@
 import { List, makeStyles } from '@material-ui/core';
-import { useEffect } from 'react';
+import { useEffect, VFC } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { OrderHistoryItem } from '../components/Products/OrderHistoryItem';
 import { RootState } from '../reducks/store/store';
@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const OrderHistory = () => {
+const OrderHistory: VFC = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const selector = useSelector((state: RootState) => state);
