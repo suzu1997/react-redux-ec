@@ -1,6 +1,7 @@
 import { Router } from './Router';
 import './index.css';
 import 'tailwindcss/tailwind.css';
+
 import { Header } from './components/Header/Header';
 import { MenuColumn } from './components/Products/MenuColumn';
 import { Footer } from './components/Footer/Footer';
@@ -8,7 +9,7 @@ import banner from './assets/img/banner.jpg';
 
 const App = () => {
   return (
-    <div className='flex flex-col'>
+    <div className='flex flex-col min-h-screen'>
       <Header />
       <main className='py-24 flex flex-1'>
         <div className='hidden lg:block lg:w-60 ml-2'>
