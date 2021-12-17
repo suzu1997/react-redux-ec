@@ -29,6 +29,7 @@ export const Router = () => {
         <Route path="/product/edit(/:id)?" component={ProductEdit} />
         <Route exact path={'/cart'} component={CartList} />
         <Route exact path={'/order/confirm'} component={OrderConfirm} />
+        <Route exact path={'/order/complete'} component={OrderComplete} />
         <Route exact path={'/order/history'} component={OrderHistory} />
       </Auth>
     </Switch>
