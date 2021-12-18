@@ -19,7 +19,9 @@ const ResetPass: VFC = () => {
 
   return (
     <div className='mx-auto my-0 max-w-md p-4 h-auto w-[calc(100%_-_2rem)]'>
-      <h2 className='text-blue-500 text-2xl mt-0 mx-auto mb-4 text-center'>パスワードのリセット</h2>
+      <h2 className='text-blue-500 text-2xl mt-0 mx-auto mb-4 text-center'>
+        パスワードのリセット
+      </h2>
       <div className='h-8 sm:h-12' />
 
       <TextInput
@@ -38,7 +40,12 @@ const ResetPass: VFC = () => {
           label='Reset Password'
           onClick={() => dispatch(resetPassword(email))}
         />
-        <p onClick={() => dispatch(push('/signin'))}>ログイン画面に戻る</p>
+        <p
+          onClick={() => dispatch(push('/signin'))}
+          className='cursor-pointer underline hover:opacity-70'
+        >
+          ログイン画面に戻る
+        </p>
       </div>
     </div>
   );

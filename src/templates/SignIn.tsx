@@ -55,10 +55,10 @@ const SignIn: VFC = () => {
           label='SIGN IN'
           onClick={() => dispatch(signIn(email, password))}
         />
-        <p onClick={() => dispatch(push('/signup'))}>
+        <p onClick={() => dispatch(push('/signup'))} className='cursor-pointer underline hover:opacity-70 mb-5'>
           アカウントをお持ちでない方はこちら
         </p>
-        <p onClick={() => dispatch(push('/signin/resetPassword'))}>
+        <p onClick={() => dispatch(push('/signin/resetPassword'))} className='cursor-pointer underline hover:opacity-70'>
           パスワードをお忘れですか？再設定はこちら
         </p>
       </div>
