@@ -43,6 +43,7 @@ const useStyles = makeStyles((theme) => ({
   media: {
     height: '0',
     paddingTop: '100%',
+    cursor: 'pointer',
   },
   price: {
     color: 'brown',
