@@ -10,6 +10,14 @@ const ProductList: VFC = () => {
   const selector = useSelector((state: RootState) => state);
   const products = getProductList(selector);
 
+  const [order, setOrder] = useState<string>('time');
+
+  const orderOptions = [
+    { id: 'time', name: '更新順' },
+    { id: 'expensive', name: '価格:高い順' },
+    { id: 'inexpensive', name: '価格:安い順' },
+  ];
+
   // URLからクエリパラメータを取得
   const query = selector.router.location.search;
 
@@ -26,14 +34,35 @@ const ProductList: VFC = () => {
   console.log({ keyword });
 
   useEffect(() => {
-    dispatch(fetchProducts(gender, category, keyword));
+    dispatch(fetchProducts(gender, category, keyword, order));
+
     setIsLoading(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, gender, category, keyword]);
+  }, [dispatch, gender, category, keyword, order]);
 
   return (
-    <section className='mx-auto my-0 max-w-xl py-0 px-4 text-center w-full sm:max-w-5xl flex'>
-      
+
+  return (
+    <section className='mx-auto my-0 max-w-xl py-0 px-4 text-center w-full sm:max-w-5xl'>
+      <div className='flex items-center'>
+        <div className='text-left ml-5'>
+          {keyword && (
+            <div className='text-xl'>
+              <span className='font-bold'>{keyword}</span>の検索結果
+            </div>
+          )}
+          <p>{products.length}件</p>
+        </div>
+        <div className='w-60 ml-auto mr-5'>
+          <SelectBox
+            label={'並び替え'}
+            required={false}
+            value={order}
+            select={setOrder}
+            options={orderOptions}
+          />
+        </div>
+      </div>
       <div className='flex flex-row flex-wrap'>
         {products.length > 0 &&
           products.map((product) => (

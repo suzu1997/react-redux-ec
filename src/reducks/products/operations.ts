@@ -23,7 +23,7 @@ export const deleteProduct = (id: string) => {
 }
 
 // firestoreから商品情報を取得する
-export const fetchProducts = (gender: string, category: string, keyword: string) => {
+export const fetchProducts = (gender: string, category: string, keyword: string, order: string) => {
   return async (dispatch: Dispatch) => {
     let q = query(productsRef, orderBy('updated_at', 'desc'));
     if (gender !== '') {
@@ -40,6 +40,22 @@ export const fetchProducts = (gender: string, category: string, keyword: string)
       snapshots.forEach((snapshot) => {
         productList.push(snapshot.data());
       });
+
+      // 並び替え
+      if (order === 'expensive') {
+        productList.sort(function (a, b) {
+          return a.price < b.price ? 1 : -1;
+        });
+      } else if (order === 'inexpensive') {
+        productList.sort(function (a, b) {
+          return a.price < b.price ? -1 : 1;
+        });
+      } else if (order === 'time') {
+        productList.sort(function (a, b) {
+          return a.updated_at < b.updated_at ? 1 : -1;
+        });
+      }
+
       // キーワードがなければ全てのデータを返す
       if (keyword === '') {
         dispatch(fetchProductsAction(productList))
