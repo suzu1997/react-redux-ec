@@ -1,9 +1,31 @@
 import { Order, ProductInCart, UserState } from './types';
 
+export const DELETE_FAVORITE_PRODUCTS = 'DELETE_FAVORITE_PRODUCTS';
+
+export const deleteFavoriteAction = (favorite: Array<any>) => {
+  // プレーンなオブジェクトを返す
+  return {
+    // typeとpayloadを記述する
+    type: 'DELETE_FAVORITE_PRODUCTS',
+    payload: favorite
+  }
+};
+
+export const FETCH_FAVORITE_PRODUCTS = 'FETCH_FAVORITE_PRODUCTS';
+
+export const fetchFavoriteProductsAction = (favorite: Array<any>) => {
+  // プレーンなオブジェクトを返す
+  return {
+    // typeとpayloadを記述する
+    type: 'FETCH_FAVORITE_PRODUCTS',
+    payload: favorite
+  }
+};
+
 export const FETCH_ORDERS_HISTORY = 'FETCH_ORDERS_HISTORY';
 
 export const fetchOrdersHisrtoryAction = (history: Array<Order>) => {
-  
+
   // プレーンなオブジェクトを返す
   return {
     // typeとpayloadを記述する
@@ -17,7 +39,7 @@ export const fetchOrdersHisrtoryAction = (history: Array<Order>) => {
 export const FETCH_PRODUCTS_IN_CART = 'FETCH_PRODUCTS_IN_CART';
 
 export const fetchProductsInCartAction = (products: Array<ProductInCart>) => {
-  
+
   // プレーンなオブジェクトを返す
   return {
     // typeとpayloadを記述する

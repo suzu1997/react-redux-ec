@@ -2,10 +2,59 @@ import { push } from 'connected-react-router';
 import type { Dispatch } from 'redux';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, sendPasswordResetEmail } from '@firebase/auth';
 import { auth, db, FirebaseTimestamp } from '../../firebase';
-import { getDoc, setDoc, doc, collection, query, orderBy, getDocs } from "firebase/firestore";
-import { fetchOrdersHisrtoryAction, fetchProductsInCartAction, signInAction, signOutAction } from './actions';
+import { getDoc, setDoc, doc, collection, query, orderBy, getDocs, deleteDoc } from "firebase/firestore";
+import { deleteFavoriteAction, fetchFavoriteProductsAction, fetchOrdersHisrtoryAction, fetchProductsInCartAction, signInAction, signOutAction } from './actions';
 import { RootState } from '../store/store';
 import { ProductInCart } from './types';
+
+// お気に入りから商品を削除する
+export const removeFavorite = (id: string) => {
+  return async (dispatch: Dispatch, getState: () => RootState) => {
+    const uid = getState().users.uid;
+
+    const favoriteRef = doc(db, 'users', uid, 'favorite', id);
+    // データベースから削除
+    deleteDoc(favoriteRef).then(() => {
+      const prevFavorite = getState().users.favorite;
+      // 削除した商品以外で、お気に入りリストを更新
+      const newFavorite = prevFavorite.filter((product: any) => product.id !== id);
+      dispatch(deleteFavoriteAction(newFavorite));
+    });
+  }
+}
+
+// お気に入りリストに商品を追加する
+export const addProductToFavorite = (data: any) => {
+  return async (dispatch: Dispatch, getState: () => RootState) => {
+    const uid = getState().users.uid;
+    // 'favorite' : ユーザーの持つサブコレクション
+    const favoriteRef = doc(collection(db, 'users', uid, 'favorite'));
+
+    const product = {
+      ...data,
+      id: favoriteRef.id
+    }
+    await setDoc(favoriteRef, product);
+  }
+}
+
+// お気に入りリストを取得する
+export const fetchFavoriteProducts = () => {
+  return async (dispatch: Dispatch, getState: () => RootState) => {
+    const uid = getState().users.uid;
+    const list: Array<any> = [];
+
+    const favoriteRef = collection(db, 'users', uid, 'favorite');
+    const q = query(favoriteRef, orderBy('added_at', 'desc'));
+    getDocs(q).then((snapshots) => {
+      snapshots.forEach((snapshot) => {
+        const data = snapshot.data();
+        list.push(data);
+      })
+      dispatch(fetchFavoriteProductsAction(list));
+    });
+  }
+}
 
 // ショッピングカートに商品を追加する
 export const addProductToCart = (data: any) => {

@@ -3,6 +3,11 @@ import { RootState } from '../store/store';
 
 const usersSelector = (state: RootState) => state.users;
 
+export const getFavoriteProducts = createSelector(
+  [usersSelector],
+  (state) => state.favorite
+)
+
 export const getIsSignedIn = createSelector(
   [usersSelector],
   (state) => state.isSignedIn
