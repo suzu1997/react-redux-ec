@@ -23,7 +23,7 @@ export const deleteProduct = (id: string) => {
 }
 
 // firestoreから商品情報を取得する
-export const fetchProducts = (gender: string, category: string) => {
+export const fetchProducts = (gender: string, category: string, keyword: string) => {
   return async (dispatch: Dispatch) => {
     let q = query(productsRef, orderBy('updated_at', 'desc'));
     if (gender !== '') {
@@ -40,7 +40,14 @@ export const fetchProducts = (gender: string, category: string) => {
       snapshots.forEach((snapshot) => {
         productList.push(snapshot.data());
       });
-      dispatch(fetchProductsAction(productList))
+      // キーワードがなければ全てのデータを返す
+      if (keyword === '') {
+        dispatch(fetchProductsAction(productList))
+      } else {
+        // キーワードがある場合は、キーワードに一致するものだけを抽出する
+        const filteredProducts = productList.filter((product: any) => product.name.includes(keyword))
+        dispatch(fetchProductsAction(filteredProducts))
+      }
     });
   }
 }

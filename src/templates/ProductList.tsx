@@ -21,12 +21,15 @@ const ProductList: VFC = () => {
     ? query.split('?category=')[1]
     : '';
 
-  console.log({ gender });
-  console.log({ category });
+  // クエリパラメータの先頭が?q=なら、クエリをsplitしてキーワード検索フィルターを取得
+  const keyword = /^\?q=/.test(query) ? query.split('?q=')[1] : '';
+  console.log({ keyword });
 
   useEffect(() => {
-    dispatch(fetchProducts(gender, category));
-  }, [dispatch, gender, category]);
+    dispatch(fetchProducts(gender, category, keyword));
+    setIsLoading(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch, gender, category, keyword]);
 
   return (
     <section className='mx-auto my-0 max-w-xl py-0 px-4 text-center w-full sm:max-w-5xl flex'>

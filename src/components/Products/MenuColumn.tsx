@@ -62,6 +62,14 @@ export const MenuColumn: VFC<Props> = (props) => {
       props.onClose(e);
     }
   };
+
+  const searchProducts = (e: any) => {
+    dispatch(push(`/?q=${keyword}`));
+    setKeyword('');
+    if (props.onClose) {
+      props.onClose(e);
+    }
+  };
   // 検索フィルター
   const [filters, setFilters] = useState([
     {
@@ -135,7 +143,8 @@ export const MenuColumn: VFC<Props> = (props) => {
               props.onClose(e);
             }
           }}
-          className='mt-3 ml-3 text-blue-900  rounded-md p-1'>
+          className='mt-3 ml-3 text-blue-900  rounded-md p-1'
+        >
           閉じる
         </button>
       )}
@@ -150,7 +159,7 @@ export const MenuColumn: VFC<Props> = (props) => {
           type={'text'}
           onChange={inputKeyword}
         />
-        <IconButton>
+        <IconButton onClick={searchProducts}>
           <SearchIcon />
         </IconButton>
       </div>
