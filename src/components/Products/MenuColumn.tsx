@@ -15,7 +15,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import HistoryIcon from '@mui/icons-material/History';
-import PersonIcon from '@mui/icons-material/History';
+import PersonIcon from '@mui/icons-material/Person';
 
 import { TextInput } from '../Uikit/TextInput';
 import { signOut } from '../../reducks/users/operations';
