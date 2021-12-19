@@ -66,7 +66,7 @@ export const SizeTable: VFC<Props> = (props) => {
     if (isSignedIn) {
       dispatch(fetchFavoriteProducts());
     }
-  }, [dispatch, favoriteProducts, isSignedIn]);
+  }, [dispatch, isSignedIn]);
 
   return (
     <div>
@@ -95,7 +95,12 @@ export const SizeTable: VFC<Props> = (props) => {
                         <FavoriteIcon color='secondary' />
                       </IconButton>
                     ) : (
-                      <IconButton onClick={() => addFavorite(item.size)}>
+                      <IconButton
+                        onClick={() => {
+                          addFavorite(item.size);
+                          dispatch(fetchFavoriteProducts());
+                        }}
+                      >
                         <FavoriteBorderIcon />
                       </IconButton>
                     )}
