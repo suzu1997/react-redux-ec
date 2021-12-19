@@ -76,30 +76,29 @@ const ProductDetail: VFC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [modalText, setModalText] = useState<string>('');
 
-  const closeModal = () => {
+  const closeModal = useCallback(() => {
     setIsOpen(false);
-  };
+  }, []);
 
-  const openModal = () => {
+  const openModal = useCallback(() => {
     setIsOpen(true);
-  };
-
-  // URLから商品のIDを取得
-  let id = window.location.pathname.split('/product/detail')[1];
-  if (id !== '') {
-    id = id.split('/')[1];
-  }
+  }, []);
 
   // 表示する商品
   const [product, setProduct] = useState<any>(null);
 
   // マウント時、IDで商品情報を取得
   useEffect(() => {
+    let id = window.location.pathname.split('/product/detail')[1];
+    if (id !== '') {
+      id = id.split('/')[1];
+    }
+    // URLから商品のIDを取得
     getDoc(doc(db, 'products', id)).then((snapshot) => {
       const data = snapshot.data();
       setProduct(data);
     });
-  }, [id]);
+  }, []);
 
   /**
    * 商品をカートに追加する.
@@ -129,7 +128,7 @@ const ProductDetail: VFC = () => {
         })
       );
     },
-    [product, dispatch, isSignedIn]
+    [product, dispatch, isSignedIn, openModal]
   );
 
   /**
@@ -158,7 +157,7 @@ const ProductDetail: VFC = () => {
         })
       );
     },
-    [product, dispatch, isSignedIn]
+    [product, dispatch, isSignedIn, openModal]
   );
 
   return (
@@ -185,13 +184,7 @@ const ProductDetail: VFC = () => {
           </div>
         </div>
       )}
-      <Modal
-        isOpen={isOpen}
-        setIsOpen={setIsOpen}
-        closeModal={closeModal}
-        openModal={openModal}
-        text={modalText}
-      />
+      <Modal isOpen={isOpen} closeModal={closeModal} text={modalText} />
     </section>
   );
 };

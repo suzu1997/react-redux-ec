@@ -7,16 +7,14 @@ import { GreyButton } from './GreyButton';
 
 type Props = {
   isOpen: boolean;
-  setIsOpen: (isOpen: boolean) => void;
   closeModal: VoidFunction;
-  openModal: VoidFunction;
   text: string;
 };
 
 export const Modal: VFC<Props> = (props) => {
   const { isOpen, closeModal, text } = props;
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch();  
 
   return (
     <>
