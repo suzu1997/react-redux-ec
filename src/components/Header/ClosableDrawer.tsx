@@ -1,7 +1,4 @@
-import {
-  Drawer,
-  makeStyles,
-} from '@material-ui/core';
+import { Drawer, makeStyles } from '@material-ui/core';
 import { VFC } from 'react';
 
 import { MenuColumn } from '../Products/MenuColumn';
@@ -43,15 +40,8 @@ export const ClosableDrawer: VFC<Props> = (props) => {
         ModalProps={{ keepMounted: true }} // スマホの時、開いた時のパフォーマンス上がる
         onClose={(e) => props.onClose(e)}
       >
-        <div
-          onKeyDown={(e) => {
-            props.onClose(e);
-          }}
-          onClick={(e) => {
-            props.onClose(e);
-          }}
-        >
-          <MenuColumn onClose={(e) => props.onClose(e)}/>
+        <div>
+          <MenuColumn onClose={(e) => props.onClose(e)} />
         </div>
       </Drawer>
     </nav>
