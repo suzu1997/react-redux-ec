@@ -23,12 +23,19 @@ const CartList: VFC = () => {
   const dispatch = useDispatch();
   const selector = useSelector((state: RootState) => state);
 
+  // カート内商品
   const productsInCart = getProductsInCart(selector);
 
+  /**
+   * 注文に進む.
+   */
   const goToOrder = useCallback(() => {
     dispatch(push('/order/confirm'));
   }, [dispatch]);
 
+   /**
+    * トップに戻る.
+    */
   const backToHome = useCallback(() => {
     dispatch(push('/'));
   }, [dispatch]);

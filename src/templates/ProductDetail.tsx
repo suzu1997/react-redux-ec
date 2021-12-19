@@ -1,11 +1,12 @@
-import { doc, getDoc } from 'firebase/firestore';
 import { useCallback, useEffect, useState, VFC } from 'react';
-import { db, FirebaseTimestamp } from '../firebase';
-import makeStyles from '@material-ui/core/styles/makeStyles';
+import { useDispatch } from 'react-redux';
+import { doc, getDoc } from 'firebase/firestore';
 import HTMLReactParser from 'html-react-parser';
+import makeStyles from '@material-ui/core/styles/makeStyles';
+
+import { db, FirebaseTimestamp } from '../firebase';
 import { ImageSwiper } from '../components/Products/ImageSwiper';
 import { SizeTable } from '../components/Products/SizeTable';
-import { useDispatch } from 'react-redux';
 import { addProductToCart } from '../reducks/users/operations';
 
 const useStyles = makeStyles((theme) => ({
@@ -42,7 +43,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-// テキストをHTMLに変換。改行はbrタグに変換
+/**
+ * テキストをHTMLに変換.
+ * 
+ * @remarks
+ * 改行はbrタグに変換する。
+ * 
+ * @param text - HTMLに変換するテキスト
+ * @returns textが空文字列の場合は空文字列。そうでなければHTMLに変換した文字列。
+ */
 const returnCodeToBr = (text: string) => {
   if (text === '') {
     return text;
@@ -55,13 +64,16 @@ const ProductDetail: VFC = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
+  // URLから商品のIDを取得
   let id = window.location.pathname.split('/product/detail')[1];
   if (id !== '') {
     id = id.split('/')[1];
   }
 
+  // 表示する商品
   const [product, setProduct] = useState<any>(null);
 
+  // マウント時、IDで商品情報を取得
   useEffect(() => {
     getDoc(doc(db, 'products', id)).then((snapshot) => {
       const data = snapshot.data();
@@ -69,6 +81,11 @@ const ProductDetail: VFC = () => {
     });
   }, [id]);
 
+  /**
+   * 商品をカートに追加する.
+   * 
+   * @param selectedSize - カートに追加する商品のサイズ
+   */
   const addProduct = useCallback((selectedSize) => {
     const timestamp = FirebaseTimestamp.now();
     dispatch(addProductToCart({

@@ -1,15 +1,20 @@
 import { useCallback, useState, VFC } from 'react';
+import { useDispatch } from 'react-redux';
+import { push } from 'connected-react-router';
+
 import { TextInput } from '../components/Uikit/TextInput';
 import { PrimaryButton } from '../components/Uikit/PrimaryButton';
-import { useDispatch } from 'react-redux';
 import { resetPassword } from '../reducks/users/operations';
-import { push } from 'connected-react-router';
 
 const ResetPass: VFC = () => {
   const dispatch = useDispatch();
 
+  // メールアドレス
   const [email, setEmail] = useState<string>('');
 
+  /**
+   * 入力されたメールアドレスをセット.
+   */
   const inputEmail = useCallback(
     (e) => {
       setEmail(e.target.value);

@@ -22,18 +22,20 @@ type Props = {
 };
 
 export const SelectBox: VFC<Props> = (props) => {
+  const { label, required, value, select, options } = props;
+
   const classes = useStyles();
 
   return (
     <div>
       <FormControl className={classes.formControl}>
-        <InputLabel>{props.label}</InputLabel>
+        <InputLabel>{label}</InputLabel>
         <Select
-          required={props.required}
-          value={props.value}
-          onChange={(e) => props.select(e.target.value)}
+          required={required}
+          value={value}
+          onChange={(e) => select(e.target.value)}
         >
-          {props.options.map((option) => {
+          {options.map((option) => {
             return (
               <MenuItem key={option.id} value={option.id}>
                 {option.name}

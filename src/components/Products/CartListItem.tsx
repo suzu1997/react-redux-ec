@@ -1,16 +1,17 @@
 import { VFC } from 'react';
+import { useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/styles';
-import { ProductInCart } from '../../reducks/users/types';
 import { Divider, ListItem, ListItemText } from '@material-ui/core';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import { IconButton } from '@mui/material';
 import DeleteIcon from '@material-ui/icons/Delete';
-import NoImage from '../../assets/img/no_image.png';
-import { useSelector } from 'react-redux';
-import { getUserId } from '../../reducks/users/selectors';
+
 import { deleteDoc, doc } from 'firebase/firestore';
 import { db } from '../../firebase';
+import { getUserId } from '../../reducks/users/selectors';
 import { RootState } from '../../reducks/store/store';
+import { ProductInCart } from '../../reducks/users/types';
+import NoImage from '../../assets/img/no_image.png';
 
 type Props = {
   product: ProductInCart;
@@ -32,16 +33,27 @@ const useStyles = makeStyles({
 });
 
 export const CartListItem: VFC<Props> = (props) => {
+  const { product } = props;
+
   const classes = useStyles();
   const selector = useSelector((state: RootState) => state);
   const uid = getUserId(selector);
 
-  const image =
-    props.product.images.length > 0 ? props.product.images[0].path : NoImage;
-  const name = props.product.name;
-  const price = props.product.price.toLocaleString();
-  const size = props.product.size;
+  // 商品画像
+  const image = product.images.length > 0 ? product.images[0].path : NoImage;
+  // 商品名
+  const name = product.name;
+  // 商品価格
+  const price = product.price.toLocaleString();
+  // 商品のサイズ
+  const size = product.size;
 
+  /**
+   * カートから商品を削除する.
+   *
+   * @param id - 商品ID
+   * @returns promise
+   */
   const removeProductFromCart = (id: string) => {
     return deleteDoc(doc(db, 'users', uid, 'cart', id));
   };
@@ -56,7 +68,7 @@ export const CartListItem: VFC<Props> = (props) => {
           <ListItemText primary={name} secondary={`サイズ:${size}`} />
           <ListItemText primary={`¥${price}`} />
         </div>
-        <IconButton onClick={() => removeProductFromCart(props.product.cartId)}>
+        <IconButton onClick={() => removeProductFromCart(product.cartId)}>
           <DeleteIcon />
         </IconButton>
       </ListItem>

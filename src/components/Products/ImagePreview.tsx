@@ -6,11 +6,13 @@ type Props = Image & {
 };
 
 export const ImagePreview: VFC<Props> = (props) => {
+  const { id, path, delete: deleteImage } = props;
+
   return (
     <img
-      src={props.path}
+      src={path}
       alt='プレビュー画像'
-      onClick={() => props.delete(props.id)}
+      onClick={() => deleteImage(id)}
       className='w-32 h-32 object-cover mx-auto cursor-pointer'
     />
   );

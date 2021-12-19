@@ -1,3 +1,6 @@
+import { VFC } from 'react';
+import { useDispatch } from 'react-redux';
+import { push } from 'connected-react-router';
 import {
   List,
   ListItem,
@@ -6,9 +9,7 @@ import {
   makeStyles,
 } from '@material-ui/core';
 import { Divider } from '@mui/material';
-import { push } from 'connected-react-router';
-import { VFC } from 'react';
-import { useDispatch } from 'react-redux';
+
 import { OrderProduct } from '../../reducks/products/types';
 import { PrimaryButton } from '../Uikit/PrimaryButton';
 
@@ -44,9 +45,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export const OrderedProducts: VFC<Props> = (props) => {
-  const dispatch = useDispatch();
-  const products = props.products;
+  const { products } = props;
+
   const classes = useStyles();
+  const dispatch = useDispatch();
 
   return (
     <List>

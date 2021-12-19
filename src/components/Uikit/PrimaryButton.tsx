@@ -1,6 +1,6 @@
+import type { MouseEventHandler, VFC } from 'react';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core';
-import type { MouseEventHandler, VFC } from 'react';
 
 const useStyles = makeStyles({
   button: {
@@ -24,15 +24,16 @@ type Props = {
 };
 
 export const PrimaryButton: VFC<Props> = (props: any) => {
+  const { label, onClick } = props;
   const classes = useStyles();
 
   return (
     <Button
       className={classes.button}
       variant='contained'
-      onClick={() => props.onClick()}
+      onClick={() => onClick()}
     >
-      {props.label}
+      {label}
     </Button>
   );
 };

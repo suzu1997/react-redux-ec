@@ -4,7 +4,6 @@ import { VFC } from 'react';
 import { MenuColumn } from '../Products/MenuColumn';
 
 type Props = {
-  // container: any;
   open: boolean;
   onClose: (e: any) => void;
 };
@@ -28,6 +27,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export const ClosableDrawer: VFC<Props> = (props) => {
+  const { open, onClose } = props;
   const classes = useStyles();
 
   return (
@@ -35,13 +35,13 @@ export const ClosableDrawer: VFC<Props> = (props) => {
       <Drawer
         variant='temporary'
         anchor='right' // どちらから出るか
-        open={props.open}
+        open={open}
         classes={{ paper: classes.drawerPaper }}
         ModalProps={{ keepMounted: true }} // スマホの時、開いた時のパフォーマンス上がる
-        onClose={(e) => props.onClose(e)}
+        onClose={(e) => onClose(e)}
       >
         <div>
-          <MenuColumn onClose={(e) => props.onClose(e)} />
+          <MenuColumn onClose={(e) => onClose(e)} />
         </div>
       </Drawer>
     </nav>

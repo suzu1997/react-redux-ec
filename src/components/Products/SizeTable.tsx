@@ -1,3 +1,4 @@
+import type { VFC } from 'react';
 import {
   IconButton,
   makeStyles,
@@ -9,7 +10,7 @@ import {
 } from '@material-ui/core';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
-import type { VFC } from 'react';
+
 import { Size } from '../../reducks/products/types';
 
 type Props = {
@@ -26,6 +27,8 @@ const useStyles = makeStyles({
 });
 
 export const SizeTable: VFC<Props> = (props) => {
+  const { sizes, addProduct } = props;
+
   const classes = useStyles();
 
   return (
@@ -33,8 +36,8 @@ export const SizeTable: VFC<Props> = (props) => {
       <TableContainer>
         <Table>
           <TableBody>
-            {props.sizes.length > 0 &&
-              props.sizes.map((item, i) => (
+            {sizes.length > 0 &&
+              sizes.map((item, i) => (
                 <TableRow key={item.size}>
                   <TableCell component='th' scope='row'>
                     {item.size}
@@ -42,7 +45,7 @@ export const SizeTable: VFC<Props> = (props) => {
                   <TableCell>残り{item.quantity}点</TableCell>
                   <TableCell className={classes.iconCell}>
                     {Number(item.quantity) > 0 ? (
-                      <IconButton onClick={() => props.addProduct(item.size)}>
+                      <IconButton onClick={() => addProduct(item.size)}>
                         <ShoppingCartIcon />
                       </IconButton>
                     ) : (

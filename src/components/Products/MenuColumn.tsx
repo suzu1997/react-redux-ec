@@ -1,3 +1,7 @@
+import { useCallback, useEffect, useState, VFC } from 'react';
+import { useDispatch } from 'react-redux';
+import { push } from 'connected-react-router';
+import { collection, getDocs, orderBy, query } from 'firebase/firestore';
 import {
   Divider,
   IconButton,
@@ -12,13 +16,9 @@ import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import HistoryIcon from '@mui/icons-material/History';
 import PersonIcon from '@mui/icons-material/History';
-import { push } from 'connected-react-router';
-import { useCallback, useEffect, useState, VFC } from 'react';
-import { useDispatch } from 'react-redux';
 
 import { TextInput } from '../Uikit/TextInput';
 import { signOut } from '../../reducks/users/operations';
-import { collection, getDocs, orderBy, query } from 'firebase/firestore';
 import { db } from '../../firebase';
 
 const useStyles = makeStyles((theme) => ({
@@ -44,11 +44,19 @@ type Props = {
 };
 
 export const MenuColumn: VFC<Props> = (props) => {
+  const { onClose } = props;
+
   const dispatch = useDispatch();
   const classes = useStyles();
 
+  // 検索キーワード
   const [keyword, setKeyword] = useState<string>('');
 
+  /**
+   * 入力値を検索キーワードに設定.
+   *
+   * @param e - event
+   */
   const inputKeyword = useCallback(
     (e) => {
       setKeyword(e.target.value);
@@ -56,18 +64,33 @@ export const MenuColumn: VFC<Props> = (props) => {
     [setKeyword]
   );
 
+  /**
+   * 選択したメニュー先に遷移.
+   *
+   * @param e - event
+   * @param path - 遷移先のパス
+   */
   const selectMenu = (e: any, path: string) => {
     dispatch(push(path));
-    if (props.onClose) {
-      props.onClose(e);
+
+    // ドロワーメニューなら、閉じる
+    if (onClose) {
+      onClose(e);
     }
   };
 
+  /**
+   * 商品を検索する.
+   *
+   * @param e - event
+   */
   const searchProducts = (e: any) => {
     dispatch(push(`/?q=${keyword}`));
     setKeyword('');
-    if (props.onClose) {
-      props.onClose(e);
+
+    // ドロワーメニューなら、閉じる
+    if (onClose) {
+      onClose(e);
     }
   };
   // 検索フィルター
@@ -92,6 +115,7 @@ export const MenuColumn: VFC<Props> = (props) => {
     },
   ]);
 
+  // メニューリスト
   const menus = [
     {
       func: selectMenu,
@@ -116,6 +140,7 @@ export const MenuColumn: VFC<Props> = (props) => {
     },
   ];
 
+  // マウント時にフィルターメニューを取得
   useEffect(() => {
     const q = query(collection(db, 'categories'), orderBy('order', 'asc'));
     getDocs(q).then((snapshots) => {
@@ -136,11 +161,11 @@ export const MenuColumn: VFC<Props> = (props) => {
 
   return (
     <div>
-      {props.onClose && (
+      {onClose && (
         <button
           onClick={(e) => {
-            if (props.onClose) {
-              props.onClose(e);
+            if (onClose) {
+              onClose(e);
             }
           }}
           className='mt-3 ml-3 text-blue-900  rounded-md p-1'
@@ -180,8 +205,8 @@ export const MenuColumn: VFC<Props> = (props) => {
           key='logout'
           onClick={(e) => {
             dispatch(signOut());
-            if (props.onClose) {
-              props.onClose(e);
+            if (onClose) {
+              onClose(e);
             }
           }}
         >

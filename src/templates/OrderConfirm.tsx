@@ -1,6 +1,7 @@
-import { Divider, List, makeStyles } from '@material-ui/core';
 import { useCallback, useMemo, VFC } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Divider, List, makeStyles } from '@material-ui/core';
+
 import { CartListItem } from '../components/Products/CartListItem';
 import { TextDetail } from '../components/Uikit/TextDetail';
 import { PrimaryButton } from '../components/Uikit/PrimaryButton';
@@ -58,6 +59,9 @@ const OrderConfirm: VFC = () => {
   // 合計金額を計算
   const total = subtotal + shippingFee + tax;
 
+  /**
+   * 注文を確定する.
+   */
   const order = useCallback(() => {
     dispatch(orderProduct(productsInCart, total));
   }, [productsInCart, total, dispatch]);

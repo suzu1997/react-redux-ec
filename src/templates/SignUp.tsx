@@ -1,36 +1,53 @@
 import { useCallback, useState, VFC } from 'react';
+import { useDispatch } from 'react-redux';
+import { push } from 'connected-react-router';
+
 import { TextInput } from '../components/Uikit/TextInput';
 import { PrimaryButton } from '../components/Uikit/PrimaryButton';
-import { useDispatch } from 'react-redux';
 import { signUp } from '../reducks/users/operations';
-import { push } from 'connected-react-router';
 
 const SignUp: VFC = () => {
   const dispatch = useDispatch();
 
+  // ユーザー名
   const [username, setUsername] = useState<string>('');
+  // メールアドレス
   const [email, setEmail] = useState<string>('');
+  // パスワード
   const [password, setPassword] = useState<string>('');
+  // パスワード（確認）
   const [confirmPassword, setConfirmPassword] = useState<string>('');
 
+  /**
+   * 入力されたユーザー名をセット.
+   */
   const inputUsername = useCallback(
     (e) => {
       setUsername(e.target.value);
     },
     [setUsername]
   );
+  /**
+   * 入力されたメールアドレスをセット.
+   */
   const inputEmail = useCallback(
     (e) => {
       setEmail(e.target.value);
     },
     [setEmail]
   );
+  /**
+   * 入力されたパスワードをセット.
+   */
   const inputPassword = useCallback(
     (e) => {
       setPassword(e.target.value);
     },
     [setPassword]
   );
+  /**
+   * 入力されたパスワード（確認）をセット.
+   */
   const inputConfirmPassword = useCallback(
     (e) => {
       setConfirmPassword(e.target.value);

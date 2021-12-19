@@ -1,5 +1,5 @@
-import { makeStyles } from '@material-ui/core';
 import { VFC } from 'react';
+import { makeStyles } from '@material-ui/core';
 
 type Props = {
   label: string;
@@ -24,12 +24,14 @@ const useStyles = makeStyles({
 });
 
 export const TextDetail: VFC<Props> = (props) => {
+  const { label, value } = props;
+
   const classes = useStyles();
 
   return (
     <div className={classes.row}>
-      <div className={classes.label}>{props.label}</div>
-      <div className={classes.value}>{props.value}</div>
+      <div className={classes.label}>{label}</div>
+      <div className={classes.value}>{value}</div>
     </div>
   );
 };

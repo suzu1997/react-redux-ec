@@ -1,10 +1,16 @@
-import { IconButton } from '@material-ui/core';
 import { useCallback, VFC } from 'react';
+import {
+  deleteObject,
+  getDownloadURL,
+  ref,
+  uploadBytes,
+} from '@firebase/storage';
+import { IconButton } from '@material-ui/core';
 import AddPhotoAlternateIcon from '@material-ui/icons/AddPhotoAlternate';
 import { makeStyles } from '@material-ui/core';
-import { Image } from '../../reducks/products/types';
+
 import { storage } from '../../firebase';
-import { deleteObject, getDownloadURL, ref, uploadBytes } from '@firebase/storage';
+import { Image } from '../../reducks/products/types';
 import { ImagePreview } from './ImagePreview';
 
 type Props = {
@@ -21,28 +27,41 @@ const useStyles = makeStyles({
 
 // 画像用コンポーネント
 export const ImageArea: VFC<Props> = (props) => {
-  const classes = useStyles(); 
+  const { images, setImages } = props;
 
-  // 画像を削除する
-  // 引数に、削除する画像のIDを受け取る
-  const deleteImage = useCallback((id: string) => {
-    const ret = window.confirm('この画像を削除しますか？');
-    
-    if (!ret) {
-      // キャンセルを押したとき
-      return;
-    } else {
-      // OKを押したとき
-      // 削除しない画像のみのリストを作成する
-      const newImages = props.images.filter(image => image.id !== id);
-      props.setImages(newImages);
-      // storageから画像を削除
-      const deleteRef = ref(storage, 'images/' + id);
-      return deleteObject(deleteRef);
-    }
-  }, [props]);
+  const classes = useStyles();
 
-  // Cloud Storageに画像をアップロードする
+  /**
+   * 画像を削除する.
+   *
+   * @param id - 削除する画像のID
+   * @returns promiseもしくはundefined
+   */
+  const deleteImage = useCallback(
+    (id: string) => {
+      const ret = window.confirm('この画像を削除しますか？');
+
+      if (!ret) {
+        // キャンセルを押したとき
+        return;
+      } else {
+        // OKを押したとき
+        // 削除しない画像のみのリストを作成する
+        const newImages = images.filter((image) => image.id !== id);
+        setImages(newImages);
+        // storageから画像を削除
+        const deleteRef = ref(storage, 'images/' + id);
+        return deleteObject(deleteRef);
+      }
+    },
+    [images, setImages]
+  );
+
+  /**
+   * Cloud Storageに画像をアップロードする.
+   *
+   * @param e - event
+   */
   const uploadImage = useCallback(
     (e) => {
       // inputに入れた画像を取得
@@ -69,22 +88,24 @@ export const ImageArea: VFC<Props> = (props) => {
         getDownloadURL(snapshot.ref).then((downloadURL) => {
           const newImage = { id: fileName, path: downloadURL };
           // useStateのset関数。 更新前のstateを使える
-          props.setImages((prevState: Array<Image>) => [
-            ...prevState,
-            newImage,
-          ]);
+          setImages((prevState: Array<Image>) => [...prevState, newImage]);
         });
       });
     },
-    [props]
+    [setImages]
   );
 
   return (
     <div>
       <div className='flex flex-wrap gap-2 text-center'>
-        {props.images.length > 0 &&
-          props.images.map((image) => (
-            <ImagePreview delete={deleteImage} id={image.id} path={image.path} key={image.id} />
+        {images.length > 0 &&
+          images.map((image) => (
+            <ImagePreview
+              delete={deleteImage}
+              id={image.id}
+              path={image.path}
+              key={image.id}
+            />
           ))}
       </div>
       <div className='text-right'>

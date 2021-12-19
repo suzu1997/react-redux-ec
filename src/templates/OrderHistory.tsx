@@ -1,6 +1,7 @@
-import { List, makeStyles } from '@material-ui/core';
 import { useEffect, VFC } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { List, makeStyles } from '@material-ui/core';
+
 import { OrderHistoryItem } from '../components/Products/OrderHistoryItem';
 import { RootState } from '../reducks/store/store';
 import { fetchOrdersHistory } from '../reducks/users/operations';
@@ -28,12 +29,11 @@ const OrderHistory: VFC = () => {
 
   const orders = getOrdersHistory(selector);
 
+  // マウント時、購入履歴をデータベースより取得
   useEffect(() => {
     dispatch(fetchOrdersHistory());
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  console.log(orders);
 
   return (
     <section className='mx-auto my-0 max-w-xl relative py-0 px-4 text-center w-full sm:max-w-5xl'>

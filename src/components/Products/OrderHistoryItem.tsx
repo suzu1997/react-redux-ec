@@ -9,20 +9,34 @@ type Props = {
   order: Order;
 };
 
-// Date型の日時を日付と時刻の文字列に変換する
+/**
+ * Date型の日時を日付と時刻の文字列に変換する.
+ * 
+ * @param date - Date型の日時
+ * @returns 文字列に変換した日時
+ */
 const dateTimeToString = (date: Date): string => {
   return format(date, 'yyyy-MM-dd HH:mm:ss');
 };
 
-// Date型の日時を日付のみ文字列に変換する
+/**
+ * Date型の日時を日付のみ文字列に変換する
+ * 
+ * @param date - Date型の日時
+ * @returns 文字列に変換した日付
+ */
 const dateToString = (date: Date): string => {
   return format(date, 'yyyy-MM-dd');
 };
 
 export const OrderHistoryItem: VFC<Props> = (props) => {
-  const order = props.order;
+  const { order } = props;
+
+  // 注文日時
   const orderedDateTime = dateTimeToString(order.updated_at.toDate());
+  // 発送日
   const ShippingDate = dateToString(order.shipping_date.toDate());
+  // 注文の合計金額
   const price = `¥${order.amount.toLocaleString()}`;
 
   return (
@@ -38,4 +52,4 @@ export const OrderHistoryItem: VFC<Props> = (props) => {
       )}
     </div>
   );
-}
+};

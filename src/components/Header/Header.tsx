@@ -2,6 +2,7 @@ import { AppBar, makeStyles, Toolbar } from '@material-ui/core';
 import { push } from 'connected-react-router';
 import { useCallback, useState, VFC } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+
 import logo from '../../assets/img/header_logo.png';
 import { RootState } from '../../reducks/store/store';
 import { getIsSignedIn } from '../../reducks/users/selectors';
@@ -28,15 +29,19 @@ const useStyles = makeStyles({
 
 export const Header: VFC = () => {
   const classes = useStyles();
-
   const dispatch = useDispatch();
   const selector = useSelector((state: RootState) => state);
+
   // ログイン状態を取得
   const isSignedIn = getIsSignedIn(selector);
   // ドロワーの開閉状態
   const [open, setopen] = useState<boolean>(false);
 
-  // ドロワーメニューを開閉する
+  /**
+   * ドロワーメニューを開閉する.
+   * 
+   * @param event
+   */
   const handleDrawerToggle = useCallback((e) => {
     // TabかShiftを押しても閉じないように
     if (e.type === 'keydown' && (e.key === 'Tab' || e.key === 'Shift')) {

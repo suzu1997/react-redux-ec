@@ -1,3 +1,6 @@
+import { useState, VFC } from 'react';
+import { useDispatch } from 'react-redux';
+import { push } from 'connected-react-router';
 import {
   Card,
   CardContent,
@@ -7,10 +10,7 @@ import {
   Menu,
   MenuItem,
 } from '@material-ui/core';
-import { useState, VFC } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { useDispatch } from 'react-redux';
-import { push } from 'connected-react-router';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 import NoImage from '../../assets/img/no_image.png';
@@ -52,6 +52,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export const ProductCard: VFC<Props> = (props) => {
+  const { product } = props;
+
   const classes = useStyles();
   const dispatch = useDispatch();
 
@@ -60,32 +62,40 @@ export const ProductCard: VFC<Props> = (props) => {
     Element | ((element: Element) => Element) | null | undefined
   >(null);
 
-  // メニューを開く
+  /**
+   * メニューを開く.
+   * 
+   * @param e - event
+   */
   const handleClick = (e: any) => {
     setAnchorEl(e.currentTarget);
   };
 
-  // メニューを閉じる
+  /**
+   *  メニューを閉じる
+   */
   const handleClose = () => {
     setAnchorEl(null);
   };
 
+  // 商品画像。商品画像がない場合はNoImageを表示する
   const image =
-    props.product.images.length > 0 ? props.product.images[0].path : NoImage;
+    product.images.length > 0 ? product.images[0].path : NoImage;
 
-  const price = props.product.price.toLocaleString();
+  // 商品の価格
+  const price = product.price.toLocaleString();
 
   return (
     <Card className={classes.root}>
       <CardMedia
         className={classes.media}
         image={image}
-        onClick={() => dispatch(push('/product/detail/' + props.product.id))}
+        onClick={() => dispatch(push('/product/detail/' + product.id))}
       />
       <CardContent className={classes.content}>
         <div>
           <Typography color='textSecondary' component='p'>
-            {props.product.name}
+            {product.name}
           </Typography>
           <Typography className={classes.price} component='p'>
             ¥{price}
@@ -101,11 +111,11 @@ export const ProductCard: VFC<Props> = (props) => {
           onClose={handleClose}
         >
           <MenuItem
-            onClick={() => dispatch(push('/product/edit/' + props.product.id))}
+            onClick={() => dispatch(push('/product/edit/' + product.id))}
           >
             編集する
           </MenuItem>
-          <MenuItem onClick={() => dispatch(deleteProduct(props.product.id))}>
+          <MenuItem onClick={() => dispatch(deleteProduct(product.id))}>
             削除する
           </MenuItem>
         </Menu>

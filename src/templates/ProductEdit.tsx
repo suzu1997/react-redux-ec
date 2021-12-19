@@ -21,27 +21,44 @@ import { SetSizeArea } from '../components/Products/SetSizeArea';
 const ProductEdit: VFC = () => {
   const dispatch = useDispatch();
 
+  // 商品画像
   const [images, setImages] = useState<Array<Image>>([]);
+  // 商品名
   const [productName, setProductName] = useState<string>('');
+  // 商品説明
   const [productDescription, setProductDescription] = useState<string>('');
+  // 商品カテゴリ
   const [category, setCategory] = useState<string>('');
+  // 表示する商品カテゴリ群
   const [categories, setCategoris] = useState<Array<Category>>([]);
+  // 対象ジェンダー
   const [gender, setGender] = useState<string>('');
+  // 商品価格
   const [price, setPrice] = useState<string>('');
+  // サイズ
   const [sizes, setSizes] = useState<Array<Size>>([]);
 
+  /**
+   * 入力された商品名をセット
+   */
   const inputProductName = useCallback(
     (e) => {
       setProductName(e.target.value);
     },
     [setProductName]
   );
+  /**
+   *  入力された商品説明をセット
+   */
   const inputProductDescription = useCallback(
     (e) => {
       setProductDescription(e.target.value);
     },
     [setProductDescription]
   );
+  /**
+   * 入力された価格をセット
+   */
   const inputPrice = useCallback(
     (e) => {
       setPrice(e.target.value);
@@ -49,6 +66,7 @@ const ProductEdit: VFC = () => {
     [setPrice]
   );
 
+  // 対象ジェンダー群
   const genders = [
     { id: 'all', name: 'すべて' },
     { id: 'men', name: 'メンズ' },
@@ -60,8 +78,8 @@ const ProductEdit: VFC = () => {
   if (id !== '') {
     id = id.split('/')[1];
   }
+  // idがあれば、idにマッチする商品情報を取得して表示
   useEffect(() => {
-    // idがあれば、idにマッチする商品情報を取得して表示
     if (id !== '') {
       getDoc(doc(db, 'products', id)).then((snapshot) => {
         const product = snapshot.data();
@@ -78,6 +96,7 @@ const ProductEdit: VFC = () => {
     }
   }, [id]);
 
+  // マウント時、表示するカテゴリーの選択肢を取得
   useEffect(() => {
     const q = query(collection(db, 'categories'), orderBy('order', 'asc'));
     getDocs(q).then((snapshots) => {

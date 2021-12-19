@@ -9,6 +9,8 @@ type Props = {
 };
 
 export const ImageSwiper: VFC<Props> = (props) => {
+  const { images } = props;
+
   const [params] = useState({
     pagination: {
       el: '.swiper-pagination',
@@ -26,7 +28,7 @@ export const ImageSwiper: VFC<Props> = (props) => {
 
   return (
     <Swiper {...params}>
-      {props.images.length === 0 ? (
+      {images.length === 0 ? (
         <div>
           <img
             src={NoImage}
@@ -35,7 +37,7 @@ export const ImageSwiper: VFC<Props> = (props) => {
           />
         </div>
       ) : (
-        props.images.map((image: Image) => (
+        images.map((image: Image) => (
           <div key={image.id}>
             <img
               src={image.path}
