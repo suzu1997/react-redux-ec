@@ -70,7 +70,7 @@ export const HeaderMenus: VFC<Props> = (props) => {
           <ShoppingCartIcon />
         </Badge>
       </IconButton>
-      <IconButton>
+      <IconButton onClick={() => dispatch(push('/favorite'))}>
         <FavoriteBorderIcon />
       </IconButton>
       <span className='lg:hidden'>

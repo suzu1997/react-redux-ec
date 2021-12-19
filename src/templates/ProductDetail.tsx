@@ -7,7 +7,7 @@ import makeStyles from '@material-ui/core/styles/makeStyles';
 import { db, FirebaseTimestamp } from '../firebase';
 import { ImageSwiper } from '../components/Products/ImageSwiper';
 import { SizeTable } from '../components/Products/SizeTable';
-import { addProductToCart } from '../reducks/users/operations';
+import { addProductToCart, addProductToFavorite } from '../reducks/users/operations';
 
 const useStyles = makeStyles((theme) => ({
   slideBox: {
@@ -45,10 +45,10 @@ const useStyles = makeStyles((theme) => ({
 
 /**
  * テキストをHTMLに変換.
- * 
+ *
  * @remarks
  * 改行はbrタグに変換する。
- * 
+ *
  * @param text - HTMLに変換するテキスト
  * @returns textが空文字列の場合は空文字列。そうでなければHTMLに変換した文字列。
  */
@@ -83,22 +83,46 @@ const ProductDetail: VFC = () => {
 
   /**
    * 商品をカートに追加する.
-   * 
+   *
    * @param selectedSize - カートに追加する商品のサイズ
    */
-  const addProduct = useCallback((selectedSize) => {
+  const addProduct = useCallback(
+    (selectedSize) => {
+      const timestamp = FirebaseTimestamp.now();
+      dispatch(
+        addProductToCart({
+          added_at: timestamp,
+          description: product.description,
+          gender: product.gender,
+          images: product.images,
+          name: product.name,
+          price: product.price,
+          productId: product.id,
+          quantity: 1,
+          size: selectedSize,
+        })
+      );
+    },
+    [product, dispatch]
+  );
+
+  /**
+   * 商品をお気に入りに追加する.
+   * 
+   * @param selectedSize - お気に入りに追加する商品のサイズ
+   */
+  const addFavorite = useCallback((selectedSize) => {
     const timestamp = FirebaseTimestamp.now();
-    dispatch(addProductToCart({
-      added_at: timestamp,
-      description: product.description,
-      gender: product.gender,
-      images: product.images,
-      name: product.name,
-      price: product.price,
-      productId: product.id,
-      quantity: 1,
-      size: selectedSize,
-    }))
+    dispatch(
+      addProductToFavorite({
+        added_at: timestamp,
+        images: product.images,
+        name: product.name,
+        price: product.price,
+        productId: product.id,
+        size: selectedSize,
+      })
+    );
   }, [product, dispatch]);
 
   return (
@@ -109,10 +133,17 @@ const ProductDetail: VFC = () => {
             <ImageSwiper images={product.images} />
           </div>
           <div className={classes.detail}>
-            <h2 className='text-blue-500 text-2xl mt-0 mx-auto mb-4'>{product.name}</h2>
+            <h2 className='text-blue-500 text-2xl mt-0 mx-auto mb-4'>
+              {product.name}
+            </h2>
             <p className={classes.price}>¥{product.price.toLocaleString()}</p>
             <div className='h-5 sm:h-8'></div>
-            <SizeTable sizes={product.sizes} addProduct={addProduct} />
+            <SizeTable
+              product={product}
+              sizes={product.sizes}
+              addProduct={addProduct}
+              addFavorite={addFavorite}
+            />
             <div className='h-5 sm:h-8'></div>
             <p>{returnCodeToBr(product.description)}</p>
           </div>

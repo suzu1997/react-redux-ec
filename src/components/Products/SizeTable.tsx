@@ -1,4 +1,4 @@
-import type { VFC } from 'react';
+import { useCallback, useEffect, VFC } from 'react';
 import {
   IconButton,
   makeStyles,
@@ -10,12 +10,19 @@ import {
 } from '@material-ui/core';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
+import FavoriteIcon from '@material-ui/icons/Favorite';
 
 import { Size } from '../../reducks/products/types';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../reducks/store/store';
+import { getFavoriteProducts } from '../../reducks/users/selectors';
+import { fetchFavoriteProducts } from '../../reducks/users/operations';
 
 type Props = {
+  product: any;
   sizes: Array<Size>;
   addProduct: (size: string) => void;
+  addFavorite: (size: string) => void;
 };
 
 const useStyles = makeStyles({
@@ -27,9 +34,33 @@ const useStyles = makeStyles({
 });
 
 export const SizeTable: VFC<Props> = (props) => {
-  const { sizes, addProduct } = props;
+  const { sizes, addProduct, addFavorite, product } = props;
 
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const selector = useSelector((state: RootState) => state);
+  const favoriteProducts = getFavoriteProducts(selector);
+
+  /**
+   * 商品がお気に入りに登録されているかどうかを判定する
+   *
+   * @param size 商品のサイズ
+   * @returns 商品がお気に入りに登録されているかどうか
+   */
+  const isFavorite = useCallback(
+    (size: string) => {
+      return favoriteProducts.some(
+        (favorite: any) =>
+          favorite.productId === product.id && favorite.size === size
+      );
+    },
+    [favoriteProducts, product]
+  );
+
+  // マウント時、お気に入りリストをデータベースより取得
+  useEffect(() => {
+    dispatch(fetchFavoriteProducts());
+  }, [dispatch, favoriteProducts]);
 
   return (
     <div>
@@ -53,11 +84,15 @@ export const SizeTable: VFC<Props> = (props) => {
                     )}
                   </TableCell>
                   <TableCell className={classes.iconCell}>
-                    <IconButton
-                    // onClick={}
-                    >
-                      <FavoriteBorderIcon />
-                    </IconButton>
+                    {isFavorite(item.size) ? (
+                      <IconButton disabled>
+                        <FavoriteIcon color='secondary' />
+                      </IconButton>
+                    ) : (
+                      <IconButton onClick={() => addFavorite(item.size)}>
+                        <FavoriteBorderIcon />
+                      </IconButton>
+                    )}
                   </TableCell>
                 </TableRow>
               ))}
