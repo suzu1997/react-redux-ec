@@ -15,7 +15,10 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import { Size } from '../../reducks/products/types';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../reducks/store/store';
-import { getFavoriteProducts } from '../../reducks/users/selectors';
+import {
+  getFavoriteProducts,
+  getIsSignedIn,
+} from '../../reducks/users/selectors';
 import { fetchFavoriteProducts } from '../../reducks/users/operations';
 
 type Props = {
@@ -39,6 +42,7 @@ export const SizeTable: VFC<Props> = (props) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const selector = useSelector((state: RootState) => state);
+  const isSignedIn = getIsSignedIn(selector);
   const favoriteProducts = getFavoriteProducts(selector);
 
   /**
@@ -59,8 +63,10 @@ export const SizeTable: VFC<Props> = (props) => {
 
   // マウント時、お気に入りリストをデータベースより取得
   useEffect(() => {
-    dispatch(fetchFavoriteProducts());
-  }, [dispatch, favoriteProducts]);
+    if (isSignedIn) {
+      dispatch(fetchFavoriteProducts());
+    }
+  }, [dispatch, favoriteProducts, isSignedIn]);
 
   return (
     <div>

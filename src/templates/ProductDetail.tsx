@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState, VFC } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { doc, getDoc } from 'firebase/firestore';
 import HTMLReactParser from 'html-react-parser';
 import makeStyles from '@material-ui/core/styles/makeStyles';
@@ -7,7 +7,13 @@ import makeStyles from '@material-ui/core/styles/makeStyles';
 import { db, FirebaseTimestamp } from '../firebase';
 import { ImageSwiper } from '../components/Products/ImageSwiper';
 import { SizeTable } from '../components/Products/SizeTable';
-import { addProductToCart, addProductToFavorite } from '../reducks/users/operations';
+import {
+  addProductToCart,
+  addProductToFavorite,
+} from '../reducks/users/operations';
+import { RootState } from '../reducks/store/store';
+import { getIsSignedIn } from '../reducks/users/selectors';
+import { Modal } from '../components/Uikit/modal';
 
 const useStyles = makeStyles((theme) => ({
   slideBox: {
@@ -63,6 +69,20 @@ const returnCodeToBr = (text: string) => {
 const ProductDetail: VFC = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const selector = useSelector((state: RootState) => state);
+
+  const isSignedIn = getIsSignedIn(selector);
+
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [modalText, setModalText] = useState<string>('');
+
+  const closeModal = () => {
+    setIsOpen(false);
+  };
+
+  const openModal = () => {
+    setIsOpen(true);
+  };
 
   // URLから商品のIDを取得
   let id = window.location.pathname.split('/product/detail')[1];
@@ -88,6 +108,12 @@ const ProductDetail: VFC = () => {
    */
   const addProduct = useCallback(
     (selectedSize) => {
+      if (!isSignedIn) {
+        setModalText('商品をカートに入れるには、ログインをしてください。');
+        openModal();
+        return;
+      }
+
       const timestamp = FirebaseTimestamp.now();
       dispatch(
         addProductToCart({
@@ -103,27 +129,37 @@ const ProductDetail: VFC = () => {
         })
       );
     },
-    [product, dispatch]
+    [product, dispatch, isSignedIn]
   );
 
   /**
    * 商品をお気に入りに追加する.
-   * 
+   *
    * @param selectedSize - お気に入りに追加する商品のサイズ
    */
-  const addFavorite = useCallback((selectedSize) => {
-    const timestamp = FirebaseTimestamp.now();
-    dispatch(
-      addProductToFavorite({
-        added_at: timestamp,
-        images: product.images,
-        name: product.name,
-        price: product.price,
-        productId: product.id,
-        size: selectedSize,
-      })
-    );
-  }, [product, dispatch]);
+  const addFavorite = useCallback(
+    (selectedSize) => {
+      if (!isSignedIn) {
+        setModalText(
+          'お気に入り機能をご利用になるには、ログインをしてください。'
+        );
+        openModal();
+        return;
+      }
+      const timestamp = FirebaseTimestamp.now();
+      dispatch(
+        addProductToFavorite({
+          added_at: timestamp,
+          images: product.images,
+          name: product.name,
+          price: product.price,
+          productId: product.id,
+          size: selectedSize,
+        })
+      );
+    },
+    [product, dispatch, isSignedIn]
+  );
 
   return (
     <section className='mx-auto my-0 max-w-xl relative py-0 px-4 text-center w-full sm:max-w-5xl'>
@@ -149,6 +185,13 @@ const ProductDetail: VFC = () => {
           </div>
         </div>
       )}
+      <Modal
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        closeModal={closeModal}
+        openModal={openModal}
+        text={modalText}
+      />
     </section>
   );
 };
