@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState, VFC } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { push } from 'connected-react-router';
 import { collection, getDocs, orderBy, query } from 'firebase/firestore';
 import {
@@ -20,6 +20,8 @@ import PersonIcon from '@mui/icons-material/Person';
 import { TextInput } from '../Uikit/TextInput';
 import { signOut } from '../../reducks/users/operations';
 import { db } from '../../firebase';
+import { RootState } from '../../reducks/store/store';
+import { getIsSignedIn } from '../../reducks/users/selectors';
 
 const useStyles = makeStyles((theme) => ({
   drawer: {
@@ -47,7 +49,10 @@ export const MenuColumn: VFC<Props> = (props) => {
   const { onClose } = props;
 
   const dispatch = useDispatch();
+  const selector = useSelector((state: RootState) => state);
   const classes = useStyles();
+
+  const isSignedIn = getIsSignedIn(selector);
 
   // 検索キーワード
   const [keyword, setKeyword] = useState<string>('');
@@ -116,29 +121,50 @@ export const MenuColumn: VFC<Props> = (props) => {
   ]);
 
   // メニューリスト
-  const menus = [
-    {
-      func: selectMenu,
-      label: '商品登録',
-      icon: <AddCircleIcon />,
-      id: 'register',
-      value: '/product/edit', // 遷移先のパス
-    },
-    {
-      func: selectMenu,
-      label: '注文履歴',
-      icon: <HistoryIcon />,
-      id: 'history',
-      value: '/order/history', // 遷移先のパス
-    },
-    {
-      func: selectMenu,
-      label: 'プロフィール',
-      icon: <PersonIcon />,
-      id: 'profile',
-      value: '/user/myPage', // 遷移先のパス
-    },
-  ];
+  let menus: Array<any> = [];
+  if (isSignedIn) {
+    menus = [
+      {
+        func: selectMenu,
+        label: '商品登録',
+        icon: <AddCircleIcon />,
+        id: 'register',
+        value: '/product/edit', // 遷移先のパス
+      },
+      {
+        func: selectMenu,
+        label: '注文履歴',
+        icon: <HistoryIcon />,
+        id: 'history',
+        value: '/order/history', // 遷移先のパス
+      },
+      {
+        func: selectMenu,
+        label: 'プロフィール',
+        icon: <PersonIcon />,
+        id: 'profile',
+        value: '/user/myPage', // 遷移先のパス
+      },
+    ];
+  }
+  if(!isSignedIn) {
+    menus = [
+      {
+        func: selectMenu,
+        label: '会員登録',
+        icon: <PersonIcon />,
+        id: 'signup',
+        value: '/signup', // 遷移先のパス
+      },
+      {
+        func: selectMenu,
+        label: 'login',
+        icon: <PersonIcon />,
+        id: 'login',
+        value: '/signin', // 遷移先のパス
+      },
+    ]
+  }
 
   // マウント時にフィルターメニューを取得
   useEffect(() => {
@@ -200,21 +226,23 @@ export const MenuColumn: VFC<Props> = (props) => {
             <ListItemText primary={menu.label} />
           </ListItem>
         ))}
-        <ListItem
-          button
-          key='logout'
-          onClick={(e) => {
-            dispatch(signOut());
-            if (onClose) {
-              onClose(e);
-            }
-          }}
-        >
-          <ListItemIcon>
-            <ExitToAppIcon />
-          </ListItemIcon>
-          <ListItemText primary={'Logout'} />
-        </ListItem>
+        {isSignedIn && (
+          <ListItem
+            button
+            key='logout'
+            onClick={(e) => {
+              dispatch(signOut());
+              if (onClose) {
+                onClose(e);
+              }
+            }}
+          >
+            <ListItemIcon>
+              <ExitToAppIcon />
+            </ListItemIcon>
+            <ListItemText primary={'Logout'} />
+          </ListItem>
+        )}
       </List>
       <Divider />
       <List>
