@@ -12,6 +12,7 @@ import { Divider } from '@mui/material';
 
 import { OrderProduct } from '../../reducks/products/types';
 import { PrimaryButton } from '../Uikit/PrimaryButton';
+import NoImage from '../../assets/img/no_image.png';
 
 type Props = {
   products: Array<OrderProduct>;
@@ -59,7 +60,9 @@ export const OrderedProducts: VFC<Props> = (props) => {
               <ListItemAvatar>
                 <img
                   className={classes.image}
-                  src={product.images[0].path}
+                  src={
+                    product.images.length > 0 ? product.images[0].path : NoImage
+                  }
                   alt='商品画像'
                 />
               </ListItemAvatar>

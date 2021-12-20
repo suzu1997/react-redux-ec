@@ -12,6 +12,7 @@ import {
 import DeleteIcon from '@material-ui/icons/Delete';
 import { PrimaryButton } from '../Uikit/PrimaryButton';
 import { removeFavorite } from '../../reducks/users/operations';
+import NoImage from '../../assets/img/no_image.png';
 
 type Props = {
   product: any;
@@ -52,6 +53,8 @@ export const FavoriteItem: VFC<Props> = (props) => {
   const dispatch = useDispatch();
   const classes = useStyles();
 
+  const image = product.images.length > 0 ? product.images[0].path : NoImage;
+
   /**
    * お気に入りリストから商品を削除する.
    *
@@ -67,11 +70,7 @@ export const FavoriteItem: VFC<Props> = (props) => {
       <ListItem className={classes.list}>
         <div className='flex'>
           <ListItemAvatar>
-            <img
-              className={classes.image}
-              src={product.images[0].path}
-              alt='商品画像'
-            />
+            <img className={classes.image} src={image} alt='商品画像' />
           </ListItemAvatar>
           <div className={classes.text}>
             <ListItemText
