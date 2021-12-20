@@ -6,6 +6,7 @@ import { getDoc, setDoc, doc, collection, query, orderBy, getDocs, deleteDoc } f
 import { deleteFavoriteAction, fetchFavoriteProductsAction, fetchOrdersHisrtoryAction, fetchProductsInCartAction, signInAction, signOutAction } from './actions';
 import { RootState } from '../store/store';
 import { ProductInCart } from './types';
+import toast from 'react-hot-toast';
 
 // お気に入りから商品を削除する
 export const removeFavorite = (id: string) => {
@@ -35,6 +36,7 @@ export const addProductToFavorite = (data: any) => {
       id: favoriteRef.id
     }
     await setDoc(favoriteRef, product);
+    toast.success('お気に入りに追加しました');
   }
 }
 
@@ -68,6 +70,7 @@ export const addProductToCart = (data: any) => {
       cartId: cartRef.id
     }
     await setDoc(cartRef, addedProduct);
+    toast.success('商品をカートに追加しました');
     dispatch(push('/'));
   }
 }
@@ -132,14 +135,14 @@ export const resetPassword = (email: string) => {
   return async (dispatch: Dispatch) => {
     // validation
     if (email === '') {
-      alert('必須項目が未入力です');
+      toast.error('必須項目が未入力です');
       return;
     }
     sendPasswordResetEmail(auth, email).then(() => {
-      alert('入力されたアドレスにパスワードリセット用のメールを送信しました。');
+      toast.success('入力されたアドレスにパスワードリセット用のメールを送信しました。');
       dispatch(push('/signin'));
     }).catch(() => {
-      alert('パスワードリセットに失敗しました。通信状態を確認してください。');
+      toast.error('パスワードリセットに失敗しました。通信状態を確認してください。');
     })
   }
 }
@@ -149,7 +152,7 @@ export const signIn = (email: string, password: string) => {
   return async (dispatch: Dispatch) => {
     // validation
     if (email === '' || password === '') {
-      alert('必須項目が未入力です');
+      toast.error('必須項目が未入力です');
       return;
     }
     signInWithEmailAndPassword(auth, email, password).then((result) => {
@@ -173,8 +176,11 @@ export const signIn = (email: string, password: string) => {
             dispatch(push('/'));
           }
         });
+        toast.success('ログインしました');
       }
-    })
+    }).catch(() => {
+      toast.error('メールアドレス、またはパスワードが間違っています。');
+    });
   }
 }
 // アカウント登録を行う
@@ -182,13 +188,17 @@ export const signUp = (username: string, email: string, password: string, confir
   return async (dispatch: Dispatch) => {
     // validation
     if (username === '' || email === '' || password === '' || confirmPassword === '') {
-      alert('必須項目が未入力です');
+      toast.error('必須項目が未入力です');
       return;
     }
     if (password !== confirmPassword) {
-      alert('パスワードが一致しません。もう一度お試しください。');
+      toast.error('パスワードが一致しません。もう一度お試しください。');
       return;
     };
+    if (password.length < 6) {
+      toast.error('パスワードは6文字以上で入力してください。');
+      return;
+    }
     return createUserWithEmailAndPassword(auth, email, password).then((result) => {
       const user = result.user;
       // アカウント登録が成功したら、ユーザー情報をFirestoreに保存する
@@ -210,6 +220,17 @@ export const signUp = (username: string, email: string, password: string, confir
         setDoc(doc(db, 'users', uid), userInitialDate).then(() => {
           dispatch(push('/'));
         });
+        toast.success('新規登録が完了しました');
+      }
+    }).catch((error) => {
+      if (error.message === 'Firebase: Error (auth/email-already-in-use).') {
+        toast.error('新規登録に失敗しました。既に登録されているメールアドレスです。');
+      }
+      if (error.message === 'Firebase: Error (auth/invalid-email).') {
+        toast.error('新規登録に失敗しました。不正な形式のメールアドレスです。');
+      }
+      if (error.message === 'Firebase: Password should be at least 6 characters (auth/weak-password).') {
+        toast.error('新規登録に失敗しました。パスワードは6文字以上で入力してください。');
       }
     })
   }
@@ -221,6 +242,7 @@ export const signOut = () => {
     auth.signOut().then(() => {
       dispatch(signOutAction());
       dispatch(push('/signin'));
+      toast.success('ログアウトしました');
     })
   }
 }

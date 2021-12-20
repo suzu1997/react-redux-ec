@@ -6,6 +6,7 @@ import type { Image, OrderProduct, Size } from './types';
 import { deleteProductAction, fetchProductsAction } from './actions';
 import { RootState } from '../store/store';
 import { ProductInCart } from '../users/types';
+import toast from 'react-hot-toast';
 
 const productsRef = collection(db, "products");
 
@@ -147,6 +148,7 @@ export const orderProduct = (productsInCart: Array<ProductInCart>, amount: numbe
         }
         setDoc(orderRef, history).then(() => {
           dispatch(push('/order/complete'))
+          toast.success('注文が完了しました');
         });
 
       }).catch(() => {
@@ -194,6 +196,7 @@ export const saveProduct = (id: string, images: Array<Image>, name: string, desc
     // 新しい商品情報をデータベースにセット
     return setDoc(doc(productsRef, id), newData, { merge: true }).then(() => {
       dispatch(push('/'))
+      toast.success('商品情報を保存しました');
     }).catch((error) => {
       throw new Error(error);
     });
