@@ -4,16 +4,19 @@ import { doc, getDoc } from 'firebase/firestore';
 import HTMLReactParser from 'html-react-parser';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 
-import { db, FirebaseTimestamp } from '../firebase';
+import { auth, db, FirebaseTimestamp } from '../firebase';
 import { ImageSwiper } from '../components/Products/ImageSwiper';
 import { SizeTable } from '../components/Products/SizeTable';
 import {
   addProductToCart,
   addProductToFavorite,
+  fetchFavoriteProducts,
 } from '../reducks/users/operations';
 import { RootState } from '../reducks/store/store';
 import { getIsSignedIn } from '../reducks/users/selectors';
 import { Modal } from '../components/Uikit/modal';
+import { onAuthStateChanged } from 'firebase/auth';
+import { signInAction } from '../reducks/users/actions';
 
 const useStyles = makeStyles((theme) => ({
   slideBox: {
@@ -89,6 +92,30 @@ const ProductDetail: VFC = () => {
 
   // マウント時、IDで商品情報を取得
   useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // ユーザーがログインしている場合
+        const uid = user.uid;
+        // ユーザーの情報を取得
+        getDoc(doc(db, 'users', uid)).then((snapshot) => {
+          const userData = snapshot.data();
+          if (userData) {
+            // ストアの中身を更新
+            dispatch(
+              signInAction({
+                isSignedIn: true,
+                role: userData.role,
+                uid: uid,
+                username: userData.username,
+                cart: userData.cart,
+                orders: userData.orders,
+              })
+            );
+          }
+        });
+      }
+    });
+
     let id = window.location.pathname.split('/product/detail')[1];
     if (id !== '') {
       id = id.split('/')[1];
@@ -156,6 +183,7 @@ const ProductDetail: VFC = () => {
           size: selectedSize,
         })
       );
+      dispatch(fetchFavoriteProducts());
     },
     [product, dispatch, isSignedIn, openModal]
   );
