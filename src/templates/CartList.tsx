@@ -51,7 +51,7 @@ const CartList: VFC = () => {
             <CartListItem product={product} key={product.cartId} />
           ))
         ) : (
-          <div>カート内に商品が入っていません</div>
+          <p className='text-gray-500 text-xl'>カート内に商品が入っていません</p>
         )}
       </List>
       <div className='h-8 sm:h-12' />

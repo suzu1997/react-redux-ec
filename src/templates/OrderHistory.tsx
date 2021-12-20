@@ -32,17 +32,20 @@ const OrderHistory: VFC = () => {
   // マウント時、購入履歴をデータベースより取得
   useEffect(() => {
     dispatch(fetchOrdersHistory());
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <section className='mx-auto my-0 max-w-xl relative py-0 px-4 text-center w-full sm:max-w-5xl'>
       <h2 className='text-blue-500 text-2xl mt-0 mx-auto mb-4'>注文履歴</h2>
       <List className={classes.orderList}>
-        {orders.length > 0 &&
+        {orders.length > 0 ? (
           orders.map((order: Order) => (
             <OrderHistoryItem order={order} key={order.id} />
-          ))}
+          ))
+        ) : (
+          <p className='text-gray-500 text-xl'>注文履歴はありません</p>
+        )}
       </List>
     </section>
   );

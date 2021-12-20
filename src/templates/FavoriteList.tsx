@@ -43,7 +43,9 @@ const FavoriteList: VFC = () => {
             <FavoriteItem product={product} key={product.id} />
           ))
         ) : (
-          <div>お気に入りリストに入れている商品はありません。</div>
+          <p className='text-gray-500 text-xl'>
+            お気に入りリストに入れている商品はありません。
+          </p>
         )}
       </List>
     </section>
