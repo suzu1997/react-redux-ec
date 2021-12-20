@@ -98,7 +98,6 @@ export const SizeTable: VFC<Props> = (props) => {
                       <IconButton
                         onClick={() => {
                           addFavorite(item.size);
-                          dispatch(fetchFavoriteProducts());
                         }}
                       >
                         <FavoriteBorderIcon />
