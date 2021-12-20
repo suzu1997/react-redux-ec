@@ -1,5 +1,5 @@
 import { useState, VFC } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { push } from 'connected-react-router';
 import {
   Card,
@@ -15,6 +15,8 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 import NoImage from '../../assets/img/no_image.png';
 import { deleteProduct } from '../../reducks/products/operations';
+import { RootState } from '../../reducks/store/store';
+import { getRole } from '../../reducks/users/selectors';
 
 type Props = {
   product: any;
@@ -56,6 +58,9 @@ export const ProductCard: VFC<Props> = (props) => {
 
   const classes = useStyles();
   const dispatch = useDispatch();
+  const selector = useSelector((state: RootState) => state);
+
+  const role = getRole(selector);
 
   // メニュー開閉する対象の要素
   const [anchorEl, setAnchorEl] = useState<
@@ -64,7 +69,7 @@ export const ProductCard: VFC<Props> = (props) => {
 
   /**
    * メニューを開く.
-   * 
+   *
    * @param e - event
    */
   const handleClick = (e: any) => {
@@ -79,8 +84,7 @@ export const ProductCard: VFC<Props> = (props) => {
   };
 
   // 商品画像。商品画像がない場合はNoImageを表示する
-  const image =
-    product.images.length > 0 ? product.images[0].path : NoImage;
+  const image = product.images.length > 0 ? product.images[0].path : NoImage;
 
   // 商品の価格
   const price = product.price.toLocaleString();
@@ -101,24 +105,28 @@ export const ProductCard: VFC<Props> = (props) => {
             ¥{price}
           </Typography>
         </div>
-        <IconButton onClick={handleClick}>
-          <MoreVertIcon />
-        </IconButton>
-        <Menu
-          anchorEl={anchorEl}
-          keepMounted
-          open={Boolean(anchorEl)}
-          onClose={handleClose}
-        >
-          <MenuItem
-            onClick={() => dispatch(push('/product/edit/' + product.id))}
-          >
-            編集する
-          </MenuItem>
-          <MenuItem onClick={() => dispatch(deleteProduct(product.id))}>
-            削除する
-          </MenuItem>
-        </Menu>
+        {role === 'admin' && (
+          <>
+            <IconButton onClick={handleClick}>
+              <MoreVertIcon />
+            </IconButton>
+            <Menu
+              anchorEl={anchorEl}
+              keepMounted
+              open={Boolean(anchorEl)}
+              onClose={handleClose}
+            >
+              <MenuItem
+                onClick={() => dispatch(push('/product/edit/' + product.id))}
+              >
+                編集する
+              </MenuItem>
+              <MenuItem onClick={() => dispatch(deleteProduct(product.id))}>
+                削除する
+              </MenuItem>
+            </Menu>
+          </>
+        )}
       </CardContent>
     </Card>
   );

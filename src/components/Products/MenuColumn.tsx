@@ -21,7 +21,7 @@ import { TextInput } from '../Uikit/TextInput';
 import { signOut } from '../../reducks/users/operations';
 import { db } from '../../firebase';
 import { RootState } from '../../reducks/store/store';
-import { getIsSignedIn } from '../../reducks/users/selectors';
+import { getIsSignedIn, getRole } from '../../reducks/users/selectors';
 
 const useStyles = makeStyles((theme) => ({
   drawer: {
@@ -53,6 +53,7 @@ export const MenuColumn: VFC<Props> = (props) => {
   const classes = useStyles();
 
   const isSignedIn = getIsSignedIn(selector);
+  const role = getRole(selector);
 
   // 検索キーワード
   const [keyword, setKeyword] = useState<string>('');
@@ -122,15 +123,8 @@ export const MenuColumn: VFC<Props> = (props) => {
 
   // メニューリスト
   let menus: Array<any> = [];
-  if (isSignedIn) {
+  if (isSignedIn && role === 'customer') {
     menus = [
-      {
-        func: selectMenu,
-        label: '商品登録',
-        icon: <AddCircleIcon />,
-        id: 'register',
-        value: '/product/edit', // 遷移先のパス
-      },
       {
         func: selectMenu,
         label: '注文履歴',
@@ -147,7 +141,18 @@ export const MenuColumn: VFC<Props> = (props) => {
       },
     ];
   }
-  if(!isSignedIn) {
+  if (isSignedIn && role === 'admin') {
+    menus = [
+      {
+        func: selectMenu,
+        label: '商品登録',
+        icon: <AddCircleIcon />,
+        id: 'register',
+        value: '/product/edit', // 遷移先のパス
+      },
+    ];
+  }
+  if (!isSignedIn) {
     menus = [
       {
         func: selectMenu,
@@ -163,7 +168,7 @@ export const MenuColumn: VFC<Props> = (props) => {
         id: 'login',
         value: '/signin', // 遷移先のパス
       },
-    ]
+    ];
   }
 
   // マウント時にフィルターメニューを取得
