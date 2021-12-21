@@ -130,7 +130,7 @@ const ProductDetail: VFC = () => {
       const data = snapshot.data();
       setProduct(data);
     });
-  }, []);
+  }, [dispatch]);
 
   /**
    * 商品をカートに追加する.
