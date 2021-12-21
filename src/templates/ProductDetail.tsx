@@ -196,7 +196,7 @@ const ProductDetail: VFC = () => {
   return (
     <section className='mx-auto my-0 max-w-xl relative py-0 px-4 text-center w-full sm:max-w-5xl'>
       {product && (
-        <div className='flex flex-row flex-wrap'>
+        <div className='flex flex-row flex-wrap lg:mt-24'>
           <div className={classes.slideBox}>
             <ImageSwiper images={product.images} />
           </div>
