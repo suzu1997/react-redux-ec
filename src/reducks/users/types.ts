@@ -7,12 +7,17 @@ export type Action = {
 }
 
 export type UserState = {
-  isSignedIn: boolean;
-  uid: string;
-  username: string;
-  role: string;
+  address: string;
+  birthDate: string;
   cart: Array<ProductInCart>;
+  email: string;
+  isSignedIn: boolean;
   orders: Array<Order>
+  phone: string;
+  role: string;
+  uid: string;
+  username: string; 
+  zipcode: string;
 }
 
 export type ProductInCart = {

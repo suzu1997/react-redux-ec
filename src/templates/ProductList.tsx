@@ -54,12 +54,17 @@ const ProductList: VFC = () => {
             // ストアの中身を更新
             dispatch(
               signInAction({
+                address: userData.address,
+                birthDate: userData.birthDate,
+                cart: userData.cart,
+                email: userData.email,
                 isSignedIn: true,
+                orders: userData.orders,
+                phone: userData.phone,
                 role: userData.role,
                 uid: uid,
                 username: userData.username,
-                cart: userData.cart,
-                orders: userData.orders,
+                zipcode: userData.zipcode,
               })
             );
           }
