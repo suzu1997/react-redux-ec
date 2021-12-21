@@ -27,6 +27,11 @@ export const UsersReducer = (state = initialState.users, action: Action) => {
         ...state,
         cart: [...action.payload],
       }
+    case Actions.UPDATE_USER_INFO:
+      return {
+        ...state,
+        ...action.payload
+      }
     case Actions.SIGN_IN:
       // スプレット構文で展開してマージ
       // stateの中身をaction.payloadで上書き

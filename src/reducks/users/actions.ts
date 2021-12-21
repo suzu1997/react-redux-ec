@@ -48,6 +48,24 @@ export const fetchProductsInCartAction = (products: Array<ProductInCart>) => {
   }
 };
 
+export const UPDATE_USER_INFO = 'UPDATE_USER_INFO';
+
+export const updateUserInfoAction = (userState: UserState) => {
+  // プレーンなオブジェクトを返す
+  return {
+    // typeとpayloadを記述する
+    type: 'UPDATE_USER_INFO',
+    payload: {
+      address: userState.address,
+      birthDate: userState.birthDate,
+      email: userState.email,
+      phone: userState.phone,
+      username: userState.username,
+      zipcode: userState.zipcode,
+    }
+  }
+};
+
 export const SIGN_IN = 'SIGN_IN';
 
 export const signInAction = (userState: UserState) => {
@@ -56,10 +74,15 @@ export const signInAction = (userState: UserState) => {
     // typeとpayloadを記述する
     type: 'SIGN_IN',
     payload: {
+      address: userState.address,
+      birthDate: userState.birthDate,
+      email: userState.email,
       isSignedIn: true,
+      phone: userState.phone,
       role: userState.role,
       uid: userState.uid,
       username: userState.username,
+      zipcode: userState.zipcode
     }
   }
 };
@@ -72,10 +95,15 @@ export const signOutAction = () => {
   return {
     type: 'SIGN_OUT',
     payload: {
+      address: '',
+      birthDate: '',
+      email: '',
       isSignedIn: false,
+      phone: '',
       role: '',
       uid: '',
       username: '',
+      zipcode: '',
     }
   }
 }

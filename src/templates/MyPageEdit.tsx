@@ -5,6 +5,7 @@ import { SmallButton } from '../components/Uikit/SmallButton';
 import { TextInput } from '../components/Uikit/TextInput';
 
 import { RootState } from '../reducks/store/store';
+import { updateUserInfo } from '../reducks/users/operations';
 import { getUserInfo } from '../reducks/users/selectors';
 
 const MypageEdit: VFC = () => {
@@ -57,18 +58,32 @@ const MypageEdit: VFC = () => {
     [setBirthDate]
   );
 
+  const saveUserInfo = () => {
+    console.log('click!ユーザー情報更新！');
+    
+    dispatch(updateUserInfo(name, email, phone, zipcode, address, birthDate));
+  };
+
   return (
     <section className='mx-auto my-0 max-w-xl relative py-0 px-4 text-center w-full sm:max-w-5xl'>
       <h1 className='text-blue-500 text-2xl mt-0 mx-auto mb-4'>
         会員情報の変更
       </h1>
       <div className='w-3/4 shadow h-auto mx-auto text-left p-5 flex flex-col'>
-        <button
-          className='border border-gray-400 p-2 rounded-md ml-auto cursor-pointer hover:bg-gray-100'
-          onClick={() => dispatch(push('/user/myPage'))}
-        >
-          <span className='mr-2'>会員情報を保存</span>
-        </button>
+        <div className='flex'>
+          <button
+            className='border border-gray-400 p-2 rounded-md ml-auto cursor-pointer hover:bg-gray-100'
+            onClick={() => dispatch(push('/user/myPage'))}
+          >
+            <span className='mr-2'>キャンセル</span>
+          </button>
+          <button
+            className='border border-gray-400 p-2 rounded-md ml-2 cursor-pointer hover:bg-gray-100'
+            onClick={saveUserInfo}
+          >
+            <span className='mr-2'>会員情報を保存</span>
+          </button>
+        </div>
         <div>
           <TextInput
             fullWidth={true}

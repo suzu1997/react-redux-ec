@@ -3,10 +3,56 @@ import type { Dispatch } from 'redux';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, sendPasswordResetEmail } from '@firebase/auth';
 import { auth, db, FirebaseTimestamp } from '../../firebase';
 import { getDoc, setDoc, doc, collection, query, orderBy, getDocs, deleteDoc } from "firebase/firestore";
-import { deleteFavoriteAction, fetchFavoriteProductsAction, fetchOrdersHisrtoryAction, fetchProductsInCartAction, signInAction, signOutAction } from './actions';
+import { deleteFavoriteAction, fetchFavoriteProductsAction, fetchOrdersHisrtoryAction, fetchProductsInCartAction, signInAction, signOutAction, updateUserInfoAction } from './actions';
 import { RootState } from '../store/store';
 import { ProductInCart } from './types';
 import toast from 'react-hot-toast';
+
+// ユーザー情報を更新する
+export const updateUserInfo = (name: string, email: string, phone: string, zipcode: string, address: string, birthDate: string) => {
+  return async (dispatch: Dispatch, getState: () => RootState) => {
+    const uid = getState().users.uid;
+
+    const userRef = doc(db, 'users', uid);
+
+    const data = {
+      name,
+      email,
+      phone,
+      zipcode,
+      address,
+      birthDate,
+    }
+    console.log('operations', data);
+
+    // 新しいユーザー情報をデータベースにセット
+    await setDoc(userRef, data, { merge: true });
+
+    // ユーザーの情報を取得
+    getDoc(userRef).then((snapshot) => {
+      const userData = snapshot.data();
+      if (userData) {
+        // ストアの中身を更新
+        dispatch(updateUserInfoAction({
+          address: userData.address,
+          birthDate: userData.birthDate,
+          cart: userData.cart,
+          email: userData.email,
+          isSignedIn: true,
+          orders: userData.orders,
+          phone: userData.phone,
+          role: userData.role,
+          uid: uid,
+          username: userData.username,
+          zipcode: userData.zipcode,
+        }))
+      }
+    });
+
+    dispatch(push('/user/myPage'));
+    toast.success('会員情報を保存しました');
+  }
+}
 
 // お気に入りから商品を削除する
 export const removeFavorite = (id: string) => {
@@ -21,6 +67,7 @@ export const removeFavorite = (id: string) => {
       const newFavorite = prevFavorite.filter((product: any) => product.id !== id);
       dispatch(deleteFavoriteAction(newFavorite));
     });
+
   }
 }
 
@@ -114,12 +161,17 @@ export const ListenAuthState = () => {
           if (userData) {
             // ストアの中身を更新
             dispatch(signInAction({
+              address: userData.address,
+              birthDate: userData.birthDate,
+              cart: userData.cart,
+              email: userData.email,
               isSignedIn: true,
+              orders: userData.orders,
+              phone: userData.phone,
               role: userData.role,
               uid: uid,
               username: userData.username,
-              cart: userData.cart,
-              orders: userData.orders
+              zipcode: userData.zipcode,
             }))
           }
         });
@@ -166,12 +218,17 @@ export const signIn = (email: string, password: string) => {
           if (userData) {
             // ストアの中身を更新
             dispatch(signInAction({
+              address: userData.address,
+              birthDate: userData.birthDate,
+              cart: userData.cart,
+              email: userData.email,
               isSignedIn: true,
+              orders: userData.orders,
+              phone: userData.phone,
               role: userData.role,
               uid: uid,
               username: userData.username,
-              cart: userData.cart,
-              orders: userData.orders
+              zipcode: userData.zipcode,
             }))
             dispatch(push('/'));
           }
