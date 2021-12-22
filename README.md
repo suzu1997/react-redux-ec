@@ -1,46 +1,65 @@
-# Getting Started with Create React App
+## 使用技術
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+- TypeScript 4.1.2
+- React 17.0.2
+- react-router 5
+- connected-react-router 6.9.2
+- Redux 4.1.2
+- Firebase 9.6.0
+    - Cloud Firestore
+    - Firebase Authentication
+    - Storage
+- Tailwind CSS 
+- Material UI(MUI)
 
-## Available Scripts
+## 機能
 
-In the project directory, you can run:
+### サインイン/サインアップ
+Firebase Authenticationによってメール/パスワード認証を行なっています。
+sendPasswordResetEmailメソッドを用いて、パスワードを忘れた時でも新しいパスワードにすぐ変更できるようにしています。
+### 商品一覧ページ
+販売中の商品が並んだページ。
+メンズ/レディース、トップス・アウターなどのカテゴリごとの絞り込み機能、並び替え機能(更新順、価格の高い順、低い順)、キーワード検索機能をつけました。
+### 商品詳細ページ
+商品の詳細を載せたページ。
+商品画像の表示にはreact-id-swiperを使用し、複数の画像をスライダーで閲覧できるようになっています。
+サイズを選択して、ショッピングカートへの追加やお気に入りへの追加を行うことができます。
 
-### `yarn start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### ショッピングカート/購入機能
+商品詳細でショッピングカートへ追加した商品をリストで確認、リストからの削除、購入の機能があります。
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+購入の処理時には、Firestoreのトランザクションを使用しており、処理が失敗するとロールバック(全ての購入処理をリセット)されるようになっています。これにより商品の在庫や購入履歴等でのデータの乖離を阻止し、よきせぬトラブルに備えています。
+### 管理者機能
+管理者でログインした時に、商品の登録、編集、削除が行えます。
+商品の商品画像追加時には、FirebaseのStorageに画像がアップロードされます。
 
-### `yarn test`
+(管理者用アカウント)
+メールアドレス：admin@gmail.com
+パスワード:aaaaaaaa
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### プロフィールページ
+登録されている会員情報が見れるページです。
+ここで住所や電話番号、メールアドレスなどを変更することもできます。
+### レスポンシブ対応
+レスポンシブにも対応し、スマホでもデスクトップでも快適に閲覧できるようにしました。
+デスクトップ版では左側にメニュー、右側にバナーを配置した3カラム構成に。
+スマホ版ではドロワーメニューを実装しました。
 
-### `yarn build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### その他機能
+- 通知バナーでの通知
+　　　　　　
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Reactのライブラリである[react-hot-toast](https://github.com/timolins/react-hot-toast)を使用して、ログイン/ログアウト時、カートやお気に入り追加時等に、通知バナーを表示するようにしました。
+画面の端から現れて、数秒すると消える通知です。
+これにより、ユーザーの操作を邪魔することなく、通知を行うことができます。
 
-### `yarn eject`
+- ログインフィルター
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+ログインしなくても閲覧できるページ、ログイン後しか閲覧できないページを作成しました。
+商品一覧や詳細はログインしなくても見ることができます。
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+ログインしていない状態でお気に入りやカート追加をしようとすると、モーダルで
+ログインを促すような仕様にしました。
